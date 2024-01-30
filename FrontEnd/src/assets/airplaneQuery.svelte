@@ -271,7 +271,7 @@
 
             
 
-            <Card href="/cards" horizontal size = "xl" class = "bg-gray-200 w-fit relative" padding = "md" >
+            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative" padding = "md" >
 
               <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
                 <Avatar size="md" src = { airline.logo } class = "ml-8"/>
