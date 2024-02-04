@@ -1,8 +1,8 @@
 
 import homeHome from "./assets/homeHome.svelte"
 import airplaneHome from "./assets/airplaneHome.svelte"
-import login from "./assets/login.svelte"
-import signupform from "./assets/signupform.svelte"
+import login from "./modules/auth_module/login.svelte"
+import signupform from "./modules/auth_module/signupform.svelte"
 import profile from "./assets/profilepage.svelte"
 import airplaneQuery from "./assets/airplaneQuery.svelte"
 import grid from "./assets/grid.svelte"

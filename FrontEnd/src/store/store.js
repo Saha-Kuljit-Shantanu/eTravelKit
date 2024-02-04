@@ -6,6 +6,8 @@ import { writable } from 'svelte/store';
 export const storecardtitle = writable("No title");
 export const storecardcontent = writable("No content");
 
+export const reinitializeTrigger = writable(0);
+
 // -------  Store username until logout --------
 
 //export const storeusername = writable("");
@@ -23,6 +25,8 @@ export const storeAirline = writable([]);
 export const lowerMoneyLimit = writable(0);
 
 export const upperMoneyLimit = writable(1000);
+
+
 
 
 

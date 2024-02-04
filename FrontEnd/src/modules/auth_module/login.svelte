@@ -9,12 +9,13 @@
 
   import { Label, Input, InputAddon, ButtonGroup, Button } from 'flowbite-svelte';
   import { EnvelopeSolid, LockSolid } from 'flowbite-svelte-icons';
-  import Homenavigation from './navigation/homenavigation.svelte';
-  import Homenavpopover from './popovers/homenavpopover.svelte';
+  import Homenavigation from '../../assets/navigation/homenavigation.svelte';
+  import Homenavpopover from '../../assets/popovers/homenavpopover.svelte';
 
   //import { storeusername } from '../store/store'////////////////
 
   import { push } from 'svelte-spa-router'
+    import { loginapi } from '../../api/login';
 
   //storeusername.subscribe( username => { getstoreusername = username })////////////////
 
@@ -46,13 +47,7 @@
 
     console.log( formData )
 
-    const response = await fetch('http://localhost:3000/user/login', {
-         method: 'POST',
-         headers: {
-          'Content-Type': 'application/json',
-         },
-         body: formData,
-      });
+    const response = await loginapi( formData )
 
     if (!response.ok){
 
@@ -69,7 +64,7 @@
 
       window.sessionStorage.setItem( username , data.accesstoken )
 
-      window.localStorage.setItem( "username", username)
+      window.sessionStorage.setItem( "username", username)
       
       console.log(data);
 
