@@ -1,4 +1,4 @@
-
+import history from "./modules/auth_module/userProfile.svelte"
 import homeHome from "./assets/homeHome.svelte"
 import airplaneHome from "./assets/airplaneHome.svelte"
 import login from "./modules/auth_module/login.svelte"
@@ -27,9 +27,8 @@ export const routes = {
     '/' : homeHome,
 
     '/home' : homeHome,
-
-    '/home/:username' : homeHome,
-    
+    '/home/history' : history, 
+    '/home/:username' : homeHome,   
     '/signup' : signupform,
 
     '/login' : login,
