@@ -32,15 +32,13 @@
 
     import { onMount } from "svelte";
 
-    onMount( async() => {
-
-      todo() 
-
-    })
+   
 
 
     let rows = 6;
     let columns = 4;
+    let len = columns +2;
+    let selectList = []
     
     let ara = [1,0,0,1,
               1,1,1,1,
@@ -49,16 +47,33 @@
               0,0,0,1,
               0,0,0,1]
 
-    
+  onMount( async() => {
 
+    todo() 
+    len = columns+ 2
+
+  })
+
+  function selectSeat(row,col){
+
+    const newSeat = [ row, col ]
+    selectList = [...selectList, newSeat]
+
+    console.log(selectList)
+
+  }
+
+  const doNothing = () => {}
+
+    
     
 </script>
   
-<div class="grid grid-cols-6 gap-4">
+<div class="grid grid-cols-{len} gap-4">
     {#each Array(rows) as _, rowIndex}
       {#each Array(columns) as _, colIndex}
         {#if ara[columns*rowIndex + colIndex] === 0}
-        <div class="bg-green-300 p-4 text-center cursor-pointer">
+        <div role="button" tabindex="0" class="bg-green-300 p-4 text-center cursor-pointer" on:click={ () => selectSeat(rowIndex,colIndex) } on:keydown={ doNothing }>
           {String.fromCharCode(65 + rowIndex)}{colIndex + 1}
         </div>
 

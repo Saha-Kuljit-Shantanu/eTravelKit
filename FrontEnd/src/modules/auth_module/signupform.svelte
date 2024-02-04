@@ -2,13 +2,15 @@
     import { Label, Input, Button, Checkbox, A } from 'flowbite-svelte';
     
 
-    import Homenavigation from './navigation/homenavigation.svelte';
-    import Homenavpopover from './popovers/homenavpopover.svelte';
-    import DatePicker from './datepickers/formdatepicker.svelte';
+    import Homenavigation from '../../assets/navigation/homenavigation.svelte';
+    import Homenavpopover from '../../assets/popovers/homenavpopover.svelte';
+    import DatePicker from '../../assets/datepickers/formdatepicker.svelte';
 
 
     
     import { push } from 'svelte-spa-router'
+
+    import { signup } from '../../api/signup';
     
   
   
@@ -43,15 +45,7 @@
 
       const formData = JSON.stringify(jsonData);
 
-      const response = await fetch('http://localhost:3000/user/signup', {
-
-         method: 'POST',
-         headers: {
-          'Content-Type': 'application/json',
-         },
-         body: formData,
-
-      });
+      const response = await signup( formData );
 
       if (!response.ok){
 

@@ -9,7 +9,7 @@
 
     import Sortsidebar from "./sidebar/sortsidebar.svelte";
 
-    import { Button, Avatar,Timeline, TimelineItem, ButtonGroup,Badge } from "flowbite-svelte";
+    import { Button, Avatar,Timeline, TimelineItem, ButtonGroup,Badge, Alert } from "flowbite-svelte";
 
     import { AdjustmentsVerticalOutline, DollarSolid, DotsHorizontalOutline, DotsVerticalOutline } from "flowbite-svelte-icons";
 
@@ -38,7 +38,8 @@
     console.log( url, url.pathname, pathsegments, lastFiveValues )
 
     import { Card } from 'flowbite-svelte';
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
+    import { reinitializeTrigger } from '../store/store';
     import { storeAirline } from "../store/store"
 
     import { push } from 'svelte-spa-router'
@@ -48,6 +49,9 @@
     storeAirline.subscribe( line => { air_line = line} )
 
     async function todo(){
+
+
+      status = 0
 
       lastFiveValues[4] = "2024-1-29"
 
@@ -68,7 +72,17 @@
 
       todo()
 
+      // const unsubscribe = reinitializeTrigger.subscribe( () => {
+      //   todo()
+      // })
+
     })
+
+    // onDestroy((unsubscribe) => {
+      
+    //   unsubscribe();
+
+    // });
 
    
 
@@ -256,7 +270,16 @@
 
           </div>
 
-          {#if status === 404} <p> No flights match your search </p>
+          {#if status === 404} 
+
+          <div class="max-w-2xl" >
+
+            <Alert>
+              <span class="font-medium">OOPS!</span>
+              No flights match your search 
+            </Alert>
+
+          </div>
 
           {:else}
 
