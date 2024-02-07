@@ -91,7 +91,7 @@
   
   <form on:submit={handleSubmit} >
   
-  <div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden fixed">
+  <div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
   
       <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
         
@@ -107,7 +107,7 @@
       </div>
   
   
-      <div class = "basis-2/3 w-1/2 h-4/5 top-40 left-1/4 mt-2 space-y-12 overflow-y-scroll fixed"> 
+      <div class = "basis-2/3 w-1/2 h-4/5 left-1/4 mt-2 space-y-12 overflow-y-scroll fixed" id = "top-20"> 
   
         <div class = "flex flex-col justify-center " >
         
@@ -195,3 +195,13 @@
   </form>
   
   <Homenavpopover />
+
+  <style>
+
+  #top-20 {
+
+    top: 20%
+
+  }
+  
+  </style>

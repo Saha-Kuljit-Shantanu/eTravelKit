@@ -4,7 +4,7 @@ import airplaneHome from "./assets/airplaneHome.svelte"
 import login from "./modules/auth_module/login.svelte"
 import signupform from "./modules/auth_module/signupform.svelte"
 import profile from "./assets/profilepage.svelte"
-import airplaneQuery from "./assets/airplaneQuery.svelte"
+import airplaneQuery from "./modules/flight_module/airplaneQuery.svelte"
 import grid from "./assets/grid.svelte"
 
 // let username = ''

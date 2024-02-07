@@ -1,13 +1,13 @@
 <script>
 
-    import Homenavigation from "./navigation/homenavigation.svelte";
+    import Homenavigation from "../../assets/navigation/homenavigation.svelte";
 
 
-    import Endpoints from "./content/endpoints.svelte";
+    import Endpoints from "../../assets/content/endpoints.svelte";
 
-    import Otherflightparams from "./content/otherflightparams.svelte";
+    import Otherflightparams from "../../assets/content/otherflightparams.svelte";
 
-    import Sortsidebar from "./sidebar/sortsidebar.svelte";
+    import Sortsidebar from "../../assets/sidebar/sortsidebar.svelte";
 
     import { Button, Avatar,Timeline, TimelineItem, ButtonGroup,Badge, Alert } from "flowbite-svelte";
 
@@ -38,26 +38,35 @@
     console.log( url, url.pathname, pathsegments, lastFiveValues )
 
     import { Card } from 'flowbite-svelte';
-    import { onMount, onDestroy } from "svelte";
-    import { reinitializeTrigger } from '../store/store';
-    import { storeAirline } from "../store/store"
+    import { onMount } from "svelte";
+    
+    import { storeAirline, storeAirlineFilterStatus, storeAirlineQuery } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
+    import { airlineSearch } from "../../api/airlineSearch";
+
     let air_line = [], status = 0
 
-    storeAirline.subscribe( line => { air_line = line} )
+    storeAirline.subscribe( line => { air_line = line } )
+
+    storeAirlineFilterStatus.subscribe( st => { status = st } )
+
+    storeAirlineQuery.subscribe( q => { query = q } )
 
     async function todo(){
 
 
       status = 0
 
-      lastFiveValues[4] = "2024-1-29"
+      //lastFiveValues[4] = "2024-1-29"
 
-      const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`)
+      const response = await airlineSearch(lastFiveValues,query)
+      
       if (!response.ok) {
+
         status = response.status;
+
       }
 
       else air_line = await response.json();
@@ -87,19 +96,19 @@
    
 
     async function Quickest(){
-      query = 'q=quickest'
+      query = 'q=quickest&'
       todo()
 
     }
 
     async function Cheapest(){
-      query = 'q=cheapest'
+      query = 'q=cheapest&'
       todo()
 
     }
 
     async function Earliest(){
-      query = 'q=early_takeoff'
+      query = 'q=early_takeoff&'
       todo()
 
     }
@@ -110,7 +119,7 @@
 
     }
 
-    import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../store/store"
+    import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../../store/store"
 
     let source =  lastFiveValues[0], dest = lastFiveValues[1], seat_number= parseInt(lastFiveValues[2],10), seat_class= lastFiveValues[3], selectedDate= lastFiveValues[4]
 
@@ -128,9 +137,11 @@
 
       storeJourneyDate.subscribe( val => { selectedDate = val } )
 
-      lastFiveValues = [ source, dest, seat_number,seat_class,new Date('2024-01-30') ]
+      lastFiveValues = [ source, dest, seat_number,seat_class,selectedDate ]
 
-      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`)
+      window.location.href = `#/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`
+
+      
 
       todo()
 
@@ -156,7 +167,7 @@
     
 </script>
 
-<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden fixed">
+<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
   
     <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
       
@@ -172,7 +183,7 @@
     </div>
 
 
-    <div class = "basis-1/3 bg-blue-800 w-full h-1/5 top-36 left-0 space-y-12 fixed">
+    <div class = "basis-1/3 bg-blue-800 w-full h-1/5 left-0 space-y-12 fixed" id = "top-18">
 
         <form>
 
@@ -239,7 +250,7 @@
 
       <div class="flex flex-row w-full ">
   
-        <div class = "basis-1/5 h-full fixed top-72 mb-2 " > <Sortsidebar /> </div> 
+        <div class = "basis-1/5 h-full fixed mb-2 " id= "top-36"> <Sortsidebar /> </div> 
 
         
         
@@ -259,7 +270,7 @@
               Sort by pricing
             </Button>
             <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
-              <i class="fa-solid fa-plane-departure"></i>
+              <i class="fa-solid fa-plane-departure me-2"></i>
               Sort by earliest takeoff
             </Button>
             <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => unsort()}>
@@ -383,3 +394,18 @@
 
 </div>
 
+<style>
+
+  #top-18 {
+
+    top: 18%
+
+  }
+
+  #top-36 {
+
+    top: 36%
+
+  }
+
+</style>

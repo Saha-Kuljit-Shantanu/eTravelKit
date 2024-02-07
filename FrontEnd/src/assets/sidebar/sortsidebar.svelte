@@ -28,15 +28,15 @@ let upRange, lowRange
 
 let lastFiveValues = []
 
-const url = new URL(window.location.href)
+// const url = new URL(window.location.href)
 
-const pathsegments = url.hash.split('/').filter(Boolean)
+// const pathsegments = url.hash.split('/').filter(Boolean)
 
-console.log(pathsegments)
+// console.log(pathsegments)
 
-lastFiveValues = pathsegments.slice(-5)
+// lastFiveValues = pathsegments.slice(-5)
 
-console.log(lastFiveValues)
+// console.log(lastFiveValues)
 
 function handleClick(event) {
 
@@ -54,11 +54,11 @@ let up = timeRange[1]
 
 let warningMessage = '';
 
-let air_line = []
+let query = '';
 
-let query
+import { storeAirline, storeAirlineFilterStatus } from "../../store/store"
 
-import { storeAirline } from "../../store/store"
+import { airlineSearch } from '../../api/airlineSearch';
 
 async function filterMoney() {
 
@@ -68,15 +68,30 @@ async function filterMoney() {
 
   else{
 
-    query = `low_range=${lowRange}&up_range=${upRange}`
+    let status = 0, url = new URL(window.location.href), air_line = []
 
-    const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`);
+    query = `low_range=${lowRange}&up_range=${upRange}&`
 
-    const air_line = await response.json();
+    lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
-    console.log(air_line)
+    lastFiveValues[4] = "2024-1-29"
+
+    const response = await airlineSearch(lastFiveValues,query)
+      
+    if (!response.ok) {
+      status = response.status;
+    }
+    else {
+      air_line = await response.json();
+      
+    }
+
+    console.log(air_line,status)
+    storeAirline.set( air_line );
     
-    storeAirline.set( air_line )
+    
+
+    storeAirlineFilterStatus.set( status )
 
 
   }
@@ -85,26 +100,35 @@ async function filterMoney() {
 
 async function filterTime() {
 
-if (lowRange > upRange) {
-  warningMessage = 'Lower value cannot be higher than the upper limit.';
-}
 
-else{
+
+  let status = 0, url = new URL(window.location.href)
 
   console.log(timeRange[1])
 
-  query = `hour=${timeRange[1]}&minutes=0`
+  query = query + `hour=${timeRange[1]}&minutes=0&`
 
-  const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`);
+  lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
+  lastFiveValues[4] = "2024-1-29"
+
+  const response = await airlineSearch(lastFiveValues,query)
+      
+  if (!response.ok) {
+
+      status = response.status;
+
+  }
   const air_line = await response.json();
 
   console.log(air_line)
   
   storeAirline.set( air_line )
 
+  storeAirlineFilterStatus.set( status )
 
-}
+
+
 
 }
 

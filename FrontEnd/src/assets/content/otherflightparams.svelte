@@ -4,7 +4,7 @@
 
     import DatePicker from '../datepickers/journeydatepicker.svelte'
 
-    import {storeSeatNumber, storePlaneClass, storeJourneyDate} from "../../store/store"
+    import { storeSeatNumber, storePlaneClass } from "../../store/store"
 
     let lastFiveValues = []
 
@@ -62,9 +62,9 @@
       <Label class = "relative w-1/2" for = "class"> 
 
         <i class="fa-solid fa-xl fa-plane-circle-xmark absolute left-3 top-1/2 cursor-pointer"></i>
-        {#if placeholder_status === "true" }<Select items= { seat_class_list } id="class" placeholder = "class"  bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storePlaneClass.set(seat_class) } } required />
+        {#if placeholder_status === "true" }<Select items= { seat_class_list } id="class" placeholder = "class"  bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } } required />
 
-        {:else} <Select items= { seat_class_list } id="text" placeholder = { ` ${ default_seat_class } ` } bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storePlaneClass.set(seat_class) } }  />
+        {:else} <Select items= { seat_class_list } id="text" placeholder = { ` ${ default_seat_class } ` } bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } }  />
 
         
         {/if}
