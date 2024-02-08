@@ -15,7 +15,7 @@
   //import { storeusername } from '../store/store'////////////////
 
   import { push } from 'svelte-spa-router'
-    import { loginapi } from '../../api/login';
+  import { loginapi } from '../../api/login';
 
   //storeusername.subscribe( username => { getstoreusername = username })////////////////
 

@@ -24,19 +24,19 @@
 
 // {activeUrl} {activeClass} {nonActiveClass} {spanClass} href =  "{homepath}"
 
-let upRange, lowRange
+let upRange = 3000, lowRange = 100
 
 let lastFiveValues = []
 
-const url = new URL(window.location.href)
+// const url = new URL(window.location.href)
 
-const pathsegments = url.hash.split('/').filter(Boolean)
+// const pathsegments = url.hash.split('/').filter(Boolean)
 
-console.log(pathsegments)
+// console.log(pathsegments)
 
-lastFiveValues = pathsegments.slice(-5)
+// lastFiveValues = pathsegments.slice(-5)
 
-console.log(lastFiveValues)
+// console.log(lastFiveValues)
 
 function handleClick(event) {
 
@@ -46,7 +46,17 @@ function handleClick(event) {
     
 }
 
+function reformatDate(datedmy){
 
+  let date = datedmy.split('-')
+
+  let d = date[0], m = date[1], y = date[2]
+
+  let datemdy = m + '-' + d + '-' + y
+
+  return datemdy
+
+}
 
 let timeRange = [0, 100];
 
@@ -54,11 +64,11 @@ let up = timeRange[1]
 
 let warningMessage = '';
 
-let air_line = []
+let query = '';
 
-let query
+import { storeAirline, storeAirlineFilterStatus } from "../../store/store"
 
-import { storeAirline } from "../../store/store"
+import { airlineSearch } from '../../api/airlineSearch';
 
 async function filterMoney() {
 
@@ -68,15 +78,36 @@ async function filterMoney() {
 
   else{
 
-    query = `low_range=${lowRange}&up_range=${upRange}`
+    let status = 0, url = new URL(window.location.href), air_line = []
 
-    const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`);
+    query = `low_range=${lowRange}&up_range=${upRange}&`
 
-    const air_line = await response.json();
+    lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
-    console.log(air_line)
+    let x = lastFiveValues[4]
+
+    lastFiveValues[4] = reformatDate(lastFiveValues[4])
+
+
+    const response = await airlineSearch(lastFiveValues,query)
+      
+    if (!response.ok) {
+      status = response.status;
+    }
+    else {
+      air_line = await response.json();
+      
+    }
+
+    lastFiveValues[4] = x
+
+
+    console.log(air_line,status)
+    storeAirline.set( air_line );
     
-    storeAirline.set( air_line )
+    
+
+    storeAirlineFilterStatus.set( status )
 
 
   }
@@ -85,26 +116,39 @@ async function filterMoney() {
 
 async function filterTime() {
 
-if (lowRange > upRange) {
-  warningMessage = 'Lower value cannot be higher than the upper limit.';
-}
 
-else{
+
+  let status = 0, url = new URL(window.location.href)
 
   console.log(timeRange[1])
 
-  query = `hour=${timeRange[1]}&minutes=0`
+  query = `hour=${timeRange[1]}&minutes=0&`
 
-  const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`);
+  lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
+  let x = lastFiveValues[4]
+
+  lastFiveValues[4] = reformatDate(lastFiveValues[4])
+
+  const response = await airlineSearch(lastFiveValues,query)
+      
+  if (!response.ok) {
+
+      status = response.status;
+
+  }
   const air_line = await response.json();
+
+  lastFiveValues[4] = x
 
   console.log(air_line)
   
   storeAirline.set( air_line )
 
+  storeAirlineFilterStatus.set( status )
 
-}
+
+
 
 }
 
@@ -135,7 +179,7 @@ else{
       <SidebarItem label=""  class = "hover:bg-gray-800" on:click =  { handleClick }>
         <svelte:fragment slot="icon">
             
-            <Input type= "number" id= "upper_lim" bind:value = {upRange} class= "w-full" ></Input>
+            <Input type= "number" id= "upper_lim" placeholder = { upRange } bind:value = {upRange} class= "w-full" ></Input>
 
         </svelte:fragment>
         
@@ -151,7 +195,7 @@ else{
 
         <svelte:fragment slot="icon"  >
             
-            <Input type= "number" id= "lower_lim" bind:value = { lowRange } class= "w-full" ></Input>
+            <Input type= "number" id= "lower_lim" placeholder = { lowRange } bind:value = { lowRange } class= "w-full" ></Input>
 
         </svelte:fragment>
         

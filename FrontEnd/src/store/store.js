@@ -6,7 +6,7 @@ import { writable } from 'svelte/store';
 export const storecardtitle = writable("No title");
 export const storecardcontent = writable("No content");
 
-export const reinitializeTrigger = writable(0);
+
 
 // -------  Store username until logout --------
 
@@ -19,9 +19,13 @@ export const storeDest = writable("Not yet");
 
 export const storeSeatNumber = writable(0);
 export const storePlaneClass = writable("Not yet");
-export const storeJourneyDate = writable( new Date().toLocaleDateString(undefined, { day: 'numeric' , month : 'numeric' , year : 'numeric'}).split('/').join('-') );
+export const storeJourneyDate = writable( new Date().toLocaleDateString( 'en-GB' ).split('/').join('-') );
 
 export const storeAirline = writable([]);
+export const storeAirlineFilterStatus = writable(0);
+export const storeAirlineQuery = writable('');
+export const storeSelectedAirline = writable([]);
+
 export const lowerMoneyLimit = writable(0);
 
 export const upperMoneyLimit = writable(1000);

@@ -1,17 +1,17 @@
 <script>
 
-    import Homenavigation from "./navigation/homenavigation.svelte";
+    import Homenavigation from "../../assets/navigation/homenavigation.svelte";
 
 
-    import Endpoints from "./content/endpoints.svelte";
+    import Endpoints from "../../assets/content/endpoints.svelte";
 
-    import Otherflightparams from "./content/otherflightparams.svelte";
+    import Otherflightparams from "../../assets/content/otherflightparams.svelte";
 
-    import Sortsidebar from "./sidebar/sortsidebar.svelte";
+    import Sortsidebar from "../../assets/sidebar/flightsortsidebar.svelte";
 
     import { Button, Avatar,Timeline, TimelineItem, ButtonGroup,Badge, Alert } from "flowbite-svelte";
 
-    import { AdjustmentsVerticalOutline, DollarSolid, DotsHorizontalOutline, DotsVerticalOutline } from "flowbite-svelte-icons";
+    import { AdjustmentsVerticalOutline, DollarSolid, DotsHorizontalOutline, DotsVerticalOutline, LetterBoldOutline } from "flowbite-svelte-icons";
 
     // import { air_line } from "../data/airline_query"
 
@@ -38,29 +38,56 @@
     console.log( url, url.pathname, pathsegments, lastFiveValues )
 
     import { Card } from 'flowbite-svelte';
-    import { onMount, onDestroy } from "svelte";
-    import { reinitializeTrigger } from '../store/store';
-    import { storeAirline } from "../store/store"
+    import { onMount } from "svelte";
+    
+    import { storeAirline, storeAirlineFilterStatus, storeAirlineQuery, storeSelectedAirline } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
+    import { airlineSearch } from "../../api/airlineSearch";
+
     let air_line = [], status = 0
 
-    storeAirline.subscribe( line => { air_line = line} )
+    storeAirline.subscribe( line => { air_line = line } )
+
+    storeAirlineFilterStatus.subscribe( st => { status = st } )
+
+    storeAirlineQuery.subscribe( q => { query = q } )
+
+    function reformatDate(datedmy){
+
+      let date = datedmy.split('-')
+
+      let d = date[0], m = date[1], y = date[2]
+
+      let datemdy = m + '-' + d + '-' + y
+
+      return datemdy
+
+    }
 
     async function todo(){
 
 
       status = 0
 
-      lastFiveValues[4] = "2024-1-29"
+      //lastFiveValues[4] = "2024-1-29"
 
-      const response = await fetch(`http://localhost:3001/user/air/${lastFiveValues[0]}/${lastFiveValues[1]}/${lastFiveValues[4]}/person=${lastFiveValues[2]}/${lastFiveValues[3]}?${query}`)
+      let x = lastFiveValues[4]
+
+      lastFiveValues[4] = reformatDate(lastFiveValues[4])
+
+      const response = await airlineSearch(lastFiveValues,query)
+      
       if (!response.ok) {
+
         status = response.status;
+
       }
 
       else air_line = await response.json();
+
+      lastFiveValues[4] = x
     console.log(air_line);
 
     console.log(status)
@@ -87,19 +114,19 @@
    
 
     async function Quickest(){
-      query = 'q=quickest'
+      query = 'q=quickest&'
       todo()
 
     }
 
     async function Cheapest(){
-      query = 'q=cheapest'
+      query = 'q=cheapest&'
       todo()
 
     }
 
     async function Earliest(){
-      query = 'q=early_takeoff'
+      query = 'q=early_takeoff&'
       todo()
 
     }
@@ -110,7 +137,7 @@
 
     }
 
-    import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../store/store"
+    import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../../store/store"
 
     let source =  lastFiveValues[0], dest = lastFiveValues[1], seat_number= parseInt(lastFiveValues[2],10), seat_class= lastFiveValues[3], selectedDate= lastFiveValues[4]
 
@@ -128,9 +155,11 @@
 
       storeJourneyDate.subscribe( val => { selectedDate = val } )
 
-      lastFiveValues = [ source, dest, seat_number,seat_class,new Date('2024-01-30') ]
+      lastFiveValues = [ source, dest, seat_number,seat_class,selectedDate ]
 
-      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`)
+      window.location.href = `#/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`
+
+      
 
       todo()
 
@@ -138,13 +167,15 @@
       
     }
 
-    async function showGrid(flight_id){
+    async function showGrid(air_line){
 
       // /seat_details/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}
 
+      storeSelectedAirline.set(air_line)
 
+      console.log(air_line)
 
-      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}`)
+      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
 
 
 
@@ -156,7 +187,7 @@
     
 </script>
 
-<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden fixed">
+<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
   
     <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
       
@@ -172,7 +203,7 @@
     </div>
 
 
-    <div class = "basis-1/3 bg-blue-800 w-full h-1/5 top-36 left-0 space-y-12 fixed">
+    <div class = "basis-1/3 bg-blue-800 w-full h-1/5 left-0 space-y-12 fixed" id = "top-18">
 
         <form>
 
@@ -239,7 +270,7 @@
 
       <div class="flex flex-row w-full ">
   
-        <div class = "basis-1/5 h-full fixed top-72 mb-2 " > <Sortsidebar /> </div> 
+        <div class = "basis-1/5 h-full fixed mb-2 " id= "top-36"> <Sortsidebar /> </div> 
 
         
         
@@ -259,7 +290,7 @@
               Sort by pricing
             </Button>
             <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
-              <i class="fa-solid fa-plane-departure"></i>
+              <i class="fa-solid fa-plane-departure me-2"></i>
               Sort by earliest takeoff
             </Button>
             <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => unsort()}>
@@ -294,7 +325,7 @@
 
             
 
-            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative" padding = "md" >
+            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" >
 
               <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
                 <Avatar size="md" src = { airline.logo } class = "ml-8"/>
@@ -309,7 +340,7 @@
                 <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.departure_date }</p>
               </div>
 
-              <div class = "my-auto relative w-96">
+              <div class = "my-auto relative w-96" >
 
               <Timeline order="horizontal" >
                 <TimelineItem title="direct" date="" >
@@ -332,7 +363,7 @@
               </div>
               
 
-              <div class = " justify-center w-24 relative my-auto">
+              <div class = " justify-center w-24 relative my-auto ">
                 <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.to_Port }</p>
                 <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ airline.arrival_time }</Badge>
                 <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.arrival_date }</p>
@@ -340,16 +371,16 @@
 
             
 
-              <div class = " border-r border-gray-400 justify-center w-24 relative my-auto">
+              <div class = " justify-center w-24 relative my-auto">
                 
                 <p class="mt-1/2 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.duration_hour } h { airline.duration_minutes} m</p>
               </div>
 
-              <div class = " border-l border-gray-800 justify-center w-24 relative my-2">
+              <div class = " border-l border-gray-800 justify-center w-28 relative my-2">
                 
                 <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { airline.cost_class }</Badge>
 
-                <Button shadow color="dark" on:click = { () => showGrid(airline.flight_id)}> Book </Button> 
+                <Button shadow color="dark" on:click = { () => showGrid(airline)}> Book </Button> 
              
               </div>
 
@@ -383,3 +414,18 @@
 
 </div>
 
+<style>
+
+  #top-18 {
+
+    top: 18%
+
+  }
+
+  #top-36 {
+
+    top: 36%
+
+  }
+
+</style>
