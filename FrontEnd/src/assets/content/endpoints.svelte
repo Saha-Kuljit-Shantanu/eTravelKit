@@ -32,9 +32,9 @@
 <Label class = "relative w-full" for = "src">
         
     <i class="fa-solid fa-xl fa-plane-departure absolute left-3 top-1/2 cursor-pointer"></i>
-    {#if placeholder_status === "true" }<Select items= { airports } id="src" placeholder="From" bind:value = { source } class = "pl-8 font-bold font-serif bg-gray-100 border-8 border-yellow-300 h-18 rounded-none hover:bg-green-200 cursor-pointer " on:change = { () => { storeSource.set(source) } } required />
+    {#if placeholder_status === "true" }<Select items= { airports } id="src" placeholder="From" bind:value = { source } class = "pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-green-200 cursor-pointer " on:change = { () => { storeSource.set(source) } } required />
   
-    {:else} <Select items= { airports } id="text" placeholder = { ` ${ default_source } ` } bind:value = { source } class = " pl-8 font-bold font-serif bg-gray-100 border-8 border-yellow-300 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSource.set(source) } }  />
+    {:else} <Select items= { airports } id="text" placeholder = { ` ${ default_source } ` } bind:value = { source } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSource.set(source) } }  />
     
     {/if}
 
@@ -44,9 +44,9 @@
 <Label class = "relative w-full" for = "dest">
   
     <i class="fa-solid fa-xl fa-plane-arrival absolute left-3 top-1/2 cursor-pointer"></i>
-    {#if placeholder_status === "true" }<Select items= { airports } id="dest" placeholder="To" bind:value = { dest } class = "pl-8 font-bold font-serif bg-gray-100 border-8 border-yellow-300 h-18 rounded-none hover:bg-green-200 cursor-pointer " on:change = { () => { storeDest.set(dest) } } required />
+    {#if placeholder_status === "true" }<Select items= { airports } id="dest" placeholder="To" bind:value = { dest } class = "pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-green-200 cursor-pointer " on:change = { () => { storeDest.set(dest) } } required />
 
-        {:else} <Select items= { airports } id="text" placeholder = { ` ${ default_dest } ` } bind:value = { dest } class = " pl-8 font-bold font-serif bg-gray-100 border-8 border-yellow-300 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeDest.set(dest) } }  />
+        {:else} <Select items= { airports } id="text" placeholder = { ` ${ default_dest } ` } bind:value = { dest } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => {storeDest.set(dest) } }  />
     
     {/if}
 

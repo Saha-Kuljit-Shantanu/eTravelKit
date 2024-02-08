@@ -46,7 +46,7 @@
 
 <div class = "relative w-full " >
         
-    <ButtonGroup class="w-full border-8 border-yellow-300 ">
+    <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
 
       <Label class = "relative w-1/2" for = "number"> 
 

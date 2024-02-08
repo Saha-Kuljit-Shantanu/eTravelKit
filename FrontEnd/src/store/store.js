@@ -24,6 +24,8 @@ export const storeJourneyDate = writable( new Date().toLocaleDateString( 'en-GB'
 export const storeAirline = writable([]);
 export const storeAirlineFilterStatus = writable(0);
 export const storeAirlineQuery = writable('');
+export const storeSelectedAirline = writable([]);
+
 export const lowerMoneyLimit = writable(0);
 
 export const upperMoneyLimit = writable(1000);

@@ -18,6 +18,8 @@
   
     function initializeDatePicker() {
       flatpickr(inputElement, {
+
+        minDate: "today",
         dateFormat: 'd-m-Y',
         onChange: (selectedDates, dateStr) => {
           selectedDate = dateStr;

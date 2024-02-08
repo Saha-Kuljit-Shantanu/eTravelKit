@@ -112,7 +112,7 @@
   
   </div>
 
-  <div class = "basis-2/3 w-full h-4/5 mt-2 left-0 fixed overflow-y-scroll" id = "top-20"> 
+  <div class = "basis-2/3 w-full h-4/5 mt-2 left-0 fixed overflow-y-scroll overflow-x-hidden" id = "top-20"> 
 
     <div class="flex flex-row w-full ">
 

@@ -24,7 +24,7 @@
 
 // {activeUrl} {activeClass} {nonActiveClass} {spanClass} href =  "{homepath}"
 
-let upRange, lowRange
+let upRange = 3000, lowRange = 100
 
 let lastFiveValues = []
 
@@ -46,7 +46,17 @@ function handleClick(event) {
     
 }
 
+function reformatDate(datedmy){
 
+  let date = datedmy.split('-')
+
+  let d = date[0], m = date[1], y = date[2]
+
+  let datemdy = m + '-' + d + '-' + y
+
+  return datemdy
+
+}
 
 let timeRange = [0, 100];
 
@@ -74,7 +84,10 @@ async function filterMoney() {
 
     lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
-    lastFiveValues[4] = "2024-1-29"
+    let x = lastFiveValues[4]
+
+    lastFiveValues[4] = reformatDate(lastFiveValues[4])
+
 
     const response = await airlineSearch(lastFiveValues,query)
       
@@ -85,6 +98,9 @@ async function filterMoney() {
       air_line = await response.json();
       
     }
+
+    lastFiveValues[4] = x
+
 
     console.log(air_line,status)
     storeAirline.set( air_line );
@@ -106,11 +122,13 @@ async function filterTime() {
 
   console.log(timeRange[1])
 
-  query = query + `hour=${timeRange[1]}&minutes=0&`
+  query = `hour=${timeRange[1]}&minutes=0&`
 
   lastFiveValues = url.hash.split('/').filter(Boolean).slice(-5)
 
-  lastFiveValues[4] = "2024-1-29"
+  let x = lastFiveValues[4]
+
+  lastFiveValues[4] = reformatDate(lastFiveValues[4])
 
   const response = await airlineSearch(lastFiveValues,query)
       
@@ -120,6 +138,8 @@ async function filterTime() {
 
   }
   const air_line = await response.json();
+
+  lastFiveValues[4] = x
 
   console.log(air_line)
   
@@ -159,7 +179,7 @@ async function filterTime() {
       <SidebarItem label=""  class = "hover:bg-gray-800" on:click =  { handleClick }>
         <svelte:fragment slot="icon">
             
-            <Input type= "number" id= "upper_lim" bind:value = {upRange} class= "w-full" ></Input>
+            <Input type= "number" id= "upper_lim" placeholder = { upRange } bind:value = {upRange} class= "w-full" ></Input>
 
         </svelte:fragment>
         
@@ -175,7 +195,7 @@ async function filterTime() {
 
         <svelte:fragment slot="icon"  >
             
-            <Input type= "number" id= "lower_lim" bind:value = { lowRange } class= "w-full" ></Input>
+            <Input type= "number" id= "lower_lim" placeholder = { lowRange } bind:value = { lowRange } class= "w-full" ></Input>
 
         </svelte:fragment>
         

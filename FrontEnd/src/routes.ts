@@ -3,9 +3,9 @@ import homeHome from "./assets/homeHome.svelte"
 import airplaneHome from "./assets/airplaneHome.svelte"
 import login from "./modules/auth_module/login.svelte"
 import signupform from "./modules/auth_module/signupform.svelte"
-import profile from "./assets/profilepage.svelte"
+import profile from "./modules/flight_module/airplaneSeating.svelte"
 import airplaneQuery from "./modules/flight_module/airplaneQuery.svelte"
-import grid from "./assets/grid.svelte"
+import airplaneGrid from "./modules/flight_module/airplaneSeating.svelte"
 
 // let username = ''
 
@@ -40,7 +40,7 @@ export const routes = {
 
     '/airplane' : airplaneHome,
 
-    '/airplane/:source/:dest/:seatNumber/:seatClass/:selectedDate?/:flight_id' : grid,
+    '/airplane/:source/:dest/:seatNumber/:seatClass/:selectedDate?/:flight_id' : airplaneGrid,
 
     
 

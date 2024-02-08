@@ -7,11 +7,11 @@
 
     import Otherflightparams from "../../assets/content/otherflightparams.svelte";
 
-    import Sortsidebar from "../../assets/sidebar/sortsidebar.svelte";
+    import Sortsidebar from "../../assets/sidebar/flightsortsidebar.svelte";
 
     import { Button, Avatar,Timeline, TimelineItem, ButtonGroup,Badge, Alert } from "flowbite-svelte";
 
-    import { AdjustmentsVerticalOutline, DollarSolid, DotsHorizontalOutline, DotsVerticalOutline } from "flowbite-svelte-icons";
+    import { AdjustmentsVerticalOutline, DollarSolid, DotsHorizontalOutline, DotsVerticalOutline, LetterBoldOutline } from "flowbite-svelte-icons";
 
     // import { air_line } from "../data/airline_query"
 
@@ -40,7 +40,7 @@
     import { Card } from 'flowbite-svelte';
     import { onMount } from "svelte";
     
-    import { storeAirline, storeAirlineFilterStatus, storeAirlineQuery } from "../../store/store"
+    import { storeAirline, storeAirlineFilterStatus, storeAirlineQuery, storeSelectedAirline } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
@@ -54,12 +54,28 @@
 
     storeAirlineQuery.subscribe( q => { query = q } )
 
+    function reformatDate(datedmy){
+
+      let date = datedmy.split('-')
+
+      let d = date[0], m = date[1], y = date[2]
+
+      let datemdy = m + '-' + d + '-' + y
+
+      return datemdy
+
+    }
+
     async function todo(){
 
 
       status = 0
 
       //lastFiveValues[4] = "2024-1-29"
+
+      let x = lastFiveValues[4]
+
+      lastFiveValues[4] = reformatDate(lastFiveValues[4])
 
       const response = await airlineSearch(lastFiveValues,query)
       
@@ -70,6 +86,8 @@
       }
 
       else air_line = await response.json();
+
+      lastFiveValues[4] = x
     console.log(air_line);
 
     console.log(status)
@@ -149,13 +167,15 @@
       
     }
 
-    async function showGrid(flight_id){
+    async function showGrid(air_line){
 
       // /seat_details/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}
 
+      storeSelectedAirline.set(air_line)
 
+      console.log(air_line)
 
-      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}`)
+      push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
 
 
 
@@ -305,7 +325,7 @@
 
             
 
-            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative" padding = "md" >
+            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" >
 
               <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
                 <Avatar size="md" src = { airline.logo } class = "ml-8"/>
@@ -320,7 +340,7 @@
                 <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.departure_date }</p>
               </div>
 
-              <div class = "my-auto relative w-96">
+              <div class = "my-auto relative w-96" >
 
               <Timeline order="horizontal" >
                 <TimelineItem title="direct" date="" >
@@ -343,7 +363,7 @@
               </div>
               
 
-              <div class = " justify-center w-24 relative my-auto">
+              <div class = " justify-center w-24 relative my-auto ">
                 <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.to_Port }</p>
                 <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ airline.arrival_time }</Badge>
                 <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.arrival_date }</p>
@@ -351,16 +371,16 @@
 
             
 
-              <div class = " border-r border-gray-400 justify-center w-24 relative my-auto">
+              <div class = " justify-center w-24 relative my-auto">
                 
                 <p class="mt-1/2 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.duration_hour } h { airline.duration_minutes} m</p>
               </div>
 
-              <div class = " border-l border-gray-800 justify-center w-24 relative my-2">
+              <div class = " border-l border-gray-800 justify-center w-28 relative my-2">
                 
                 <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { airline.cost_class }</Badge>
 
-                <Button shadow color="dark" on:click = { () => showGrid(airline.flight_id)}> Book </Button> 
+                <Button shadow color="dark" on:click = { () => showGrid(airline)}> Book </Button> 
              
               </div>
 
