@@ -1,7 +1,7 @@
 <div class = "header-box"  >
 
-    <h1> Welcome to e-TravelKit </h1>
-    <p> Find all your tickets and best places in one platform </p>  
+    <h1 class = "text-sm text-left md:text-center md:text-3xl lg:text-5xl"> Welcome to <br class = "sm:hidden"> e-TravelKit </h1>
+    <p class = "hidden lg:inline"> Find all your tickets and best places in one platform </p>  
   
 </div>
 

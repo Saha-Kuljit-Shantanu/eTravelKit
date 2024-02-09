@@ -10,9 +10,11 @@
 
     lastSixValues = pathsegments.slice(-6)
 
-    let status, grid
+    let status = 0, grid
 
     console.log(lastSixValues)
+
+    import { airlineSeatSelect } from "../../api/airlineSeatSelect"
 
     function reformatDate(datedmy){
 
@@ -32,7 +34,7 @@
 
       lastSixValues[4] = reformatDate(lastSixValues[4])
 
-      const response = await fetch(`http://localhost:3001/user/seat_details/${lastSixValues[0]}/${lastSixValues[1]}/${lastSixValues[4]}/person=${lastSixValues[2]}/${lastSixValues[3]}/${lastSixValues[5]}`)
+      const response = await airlineSeatSelect(lastSixValues)
       if (!response.ok) {
         status = response.status;
       }

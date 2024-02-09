@@ -90,7 +90,7 @@
 
 
 
-<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden space-y-36">
+<div class = "flex flex-col w-screen h-screen fixed overflow-y-scroll overflow-x-hidden space-y-36">
 
     <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
       
@@ -107,7 +107,7 @@
 
     
 
-    <div class = "basis-2/3 w-full h-4/5 top-40 mt-2 left-0 space-y-12 fixed "> 
+    <div class = "basis-2/3 w-full h-4/5 top-16 md:top-40 mt-2 left-0 space-y-12 fixed overflow-y-scroll "> 
 
       
       
@@ -116,7 +116,7 @@
 
   
 
-        <ButtonGroup class="w-96">
+        <ButtonGroup class="w-64 md:w-96">
           <InputAddon>
             <EnvelopeSolid class="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </InputAddon>
@@ -134,7 +134,7 @@
 
         <Label for="website-user" class="block mb-2 text-lg font-serif">Enter the Password &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; </Label>
 
-          <ButtonGroup class="w-96">
+          <ButtonGroup class="w-64 md:w-96">
 
             <InputAddon>
               <LockSolid class="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -164,6 +164,8 @@
         {/if}
 
       </div>
+
+      <div>&nbsp;</div>
 
     
     

@@ -42,18 +42,20 @@
 
     export let placeholder_status
 
+    const isSmallDevice = window.innerWidth <= 600
+
 </script>
 
-<div class = "relative w-full " >
+<div class = "relative w-full space-y-6" >
         
     <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
 
       <Label class = "relative w-1/2" for = "number"> 
 
         <i class="fa-solid fa-xl fa-chair absolute left-3 top-1/2 cursor-pointer"></i>
-        {#if placeholder_status === "true" } <Select items= { seat_number } id="number" placeholder="seats" bind:value = { seats } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSeatNumber.set(seats) } } required />
+        {#if placeholder_status === "true" } <Select items= { seat_number } id="number" placeholder="seats" bind:value = { seats } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSeatNumber.set(seats) } } required />
         
-        {:else} <Select items= { seat_number } id="number" placeholder = { ` ${ default_seat_number } ` } bind:value = { seats } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSeatNumber.set(seats) } } />
+        {:else} <Select items= { seat_number } id="number" placeholder = { ` ${ default_seat_number } ` } bind:value = { seats } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSeatNumber.set(seats) } } />
 
         {/if}
 
@@ -62,9 +64,9 @@
       <Label class = "relative w-1/2" for = "class"> 
 
         <i class="fa-solid fa-xl fa-plane-circle-xmark absolute left-3 top-1/2 cursor-pointer"></i>
-        {#if placeholder_status === "true" }<Select items= { seat_class_list } id="class" placeholder = "class"  bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } } required />
+        {#if placeholder_status === "true" }<Select items= { seat_class_list } id="class" placeholder = "class"  bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } } required />
 
-        {:else} <Select items= { seat_class_list } id="text" placeholder = { ` ${ default_seat_class } ` } bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 h-18 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } }  />
+        {:else} <Select items= { seat_class_list } id="text" placeholder = { ` ${ default_seat_class } ` } bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storePlaneClass.set(seat_class) } }  />
 
         
         {/if}
@@ -78,12 +80,25 @@
 
       </Label> -->
 
-      <DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } />
+       { #if isSmallDevice === false }<DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } /> {/if}
 
       
 
+  </ButtonGroup>
+
+  {#if isSmallDevice === true} 
+
+    <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
+
+
+      <DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } /> 
+
+
     </ButtonGroup>
 
-    
+  {/if}
+
   
-  </div>
+  
+</div>
+

@@ -22,18 +22,20 @@
 
     let homepath = "/#/home/" + username
 
+    let ticketpath = "/#/history/" + username
+
 
 
 
 </script>
 
-  <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass}>
-    <SidebarWrapper class = "bg-gray-800 h-screen">
+  <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} >
+    <SidebarWrapper class = "bg-gray-800 h-screen w-fit md:w-full">
       <SidebarGroup>
 
 
 
-        <SidebarItem label="Dashboard" href =  "{homepath}" >
+        <SidebarItem label="Dashboard" href =  "{homepath}"  >
           <svelte:fragment slot="icon">
             
             <GridSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -54,7 +56,7 @@
           </svelte:fragment>
         </SidebarItem>
         
-        <SidebarItem label="Ticket History">
+        <SidebarItem label="Ticket History" href = "{ticketpath}">
           <svelte:fragment slot="icon">
             <TicketOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>

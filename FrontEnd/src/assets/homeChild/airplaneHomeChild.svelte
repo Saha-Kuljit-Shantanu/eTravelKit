@@ -56,10 +56,10 @@ function validateInputs() {
     <div class = "w-full ">
 
 
-      <div class="font-serif w-1/2 top-24 absolute font-bold"> <p class= "text-3xl"> Where do you want to go ?</p></div>
+      <div class="font-serif w-1/2 top-24 absolute font-bold"> <p class= "text-2xl md:text-3xl"> Where do you want to go ?</p></div>
 
     
-      <div class="grid gap-6 mb-6 grid-cols-2 w-1/2 top-48 absolute">
+      <div class="grid gap-6 mb-6 grid-cols-1 md:grid-cols-2 w-1/2 top-48 absolute">
 
         
 
@@ -70,7 +70,7 @@ function validateInputs() {
 
     
     
-      <div class="grid gap-8 mb-6 grid-cols-2 top-48 w-full absolute">
+      <div class="md:grid gap-8 mb-6 grid-cols-2 top-48 w-full absolute hidden sm:block">
 
         <i class="fa-solid fa-lg fa-arrow-right justify-center cursor-pointer mt-7 ml-3"></i>
     
@@ -81,13 +81,13 @@ function validateInputs() {
     <div class = "w-full ">
 
 
-      <div class="container w-1/2 top-72 absolute">
+      <div class="container w-1/2 top-84 md:top-72 absolute">
 
         <Otherflightparams defaultDate = { new Date() }  placeholder_status = "true" />
 
       </div>
 
-      <div class="right-8 top-72 absolute">
+      <div class="justify-center top-128 md:top-96 lg:right-8 lg:top-72 absolute">
 
         <Button shadow color="dark" type = "submit" border-color = "dark" class = "border-4 mt-2" on:click = { () => validateInputs() }> Search </Button>
 
@@ -106,4 +106,22 @@ function validateInputs() {
 
     
 </form>  
+
+
+<style>
+
+  @media only screen and (max-width: 600px) {
+    .top-84{
+
+      top: 336px;
+
+    }
+
+    .top-128{
+
+      top: 512px;
+
+    }
+  }
+</style>
   

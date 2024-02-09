@@ -6,6 +6,7 @@ import signupform from "./modules/auth_module/signupform.svelte"
 import profile from "./modules/flight_module/airplaneSeating.svelte"
 import airplaneQuery from "./modules/flight_module/airplaneQuery.svelte"
 import airplaneGrid from "./modules/flight_module/airplaneSeating.svelte"
+import ticketHistory from "./modules/ticket_history/ticket_history_home.svelte"
 
 // let username = ''
 
@@ -41,6 +42,8 @@ export const routes = {
     '/airplane' : airplaneHome,
 
     '/airplane/:source/:dest/:seatNumber/:seatClass/:selectedDate?/:flight_id' : airplaneGrid,
+
+    '/history/:username' : ticketHistory,
 
     
 

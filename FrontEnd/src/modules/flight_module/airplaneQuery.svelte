@@ -329,7 +329,7 @@
 
               <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
                 <Avatar size="md" src = { airline.logo } class = "ml-8"/>
-                <Badge color="yellow" class="mt-4 text-sm w-18 tracking-tight text-gray-900 dark:text-white relative">{ airline.air_company_name }</Badge>
+                <Badge color="yellow" class="mt-4 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.air_company_name }</Badge>
               </div>
 
              

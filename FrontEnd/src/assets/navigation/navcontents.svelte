@@ -75,7 +75,7 @@
 
         { #if username === undefined }
 
-        <div class = "text-lg right-72 fixed">
+        <div class = " text-lg right-36 md:right-64 lg:right-72 fixed ">
             
             <Button id="sign-up" shadow color="dark" on:mouseenter = { () =>  showCard("SignUp","Want to Register?") } on:click = { () => signup() } > Sign Up </Button> 
  
@@ -86,7 +86,7 @@
 
         { :else }
 
-        <div class = "text-lg right-96 font-bold fixed">
+        <div class = "text-sm md:text-lg right-48 md:right-72 lg:right-96 font-bold fixed">
                         
             <p> {username} </p>             
             
@@ -94,11 +94,11 @@
 
         {/if}
 
-        <div class = "right-40 fixed">
+        <div class = "right-12 md:right-36 lg:right-40 fixed">
             
             { #if username === undefined } <Button id="sign-in" shadow color="dark" on:mouseenter = { () => showCard("Login","Want to Sign into your account?") } on:click = { () => login() } > Login </Button> 
 
-            { :else } <Button id="sign-in" shadow color="dark" on:mouseenter = { () => showCard("Logout","Want to Log out from your account?") } on:click = { () => logout() } > Logout </Button> 
+            { :else } <Button id="logout" shadow color="dark" size="lg" on:mouseenter = { () => showCard("Logout","Want to Log out from your account?") } on:click = { () => logout() } > Logout </Button> 
             
             {/if}
 
@@ -107,11 +107,11 @@
         
         <!-- <div></div> -->
 
-        <div class = "right-8 fixed">
+        <div class = "right-4 md:right-6 lg:right-8 fixed">
             
-            { #if username === null } <UserCircleOutline id="sign-profile" shadow class = " w-10 h-10 cursor-pointer" on:mouseenter = { () => showCard("User Profile","View or edit your profile?") } > </UserCircleOutline> 
+            { #if username === undefined } <UserCircleOutline id="sign-profile" shadow class = " w-5 h-5 md:w-10 md:h-10 cursor-pointer " on:mouseenter = { () => showCard("User Profile","View or edit your profile?") } > </UserCircleOutline> 
             
-            { :else } <UserCircleOutline id="sign-profile" shadow class = " w-10 h-10 cursor-pointer" on:mouseenter = { () => showCard("User Profile","View or edit your profile?") } > </UserCircleOutline> 
+            { :else } <UserCircleOutline id="sign-profile" shadow class = " w-5 h-5 md:w-10 md:h-10 cursor-pointer " on:mouseenter = { () => showCard("User Profile","View or edit your profile?") } > </UserCircleOutline> 
             
             { /if }
             
