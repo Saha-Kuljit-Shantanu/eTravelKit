@@ -4,6 +4,8 @@
 
     import DatePicker from '../../assets/datepickers/formdatepicker.svelte';
 
+    import Detailsidebar from "../../assets/sidebar/flightjourneysidebar.svelte";
+
     import { Button, Card, FloatingLabelInput, Label, Select } from "flowbite-svelte";
 
     import { storeAirplaneSelectedSeat } from '../../store/store';
@@ -39,11 +41,13 @@
     
     </div>
 
-    <div class = "basis-2/3 w-full h-4/5 left-0 my-2 ml-2 space-y-2 fixed overflow-x-scroll" id = "top-20">
+    <div class = "basis-1/5 h-full w-1/3 fixed mb-8 left-0" id = "top-20" > <Detailsidebar /> </div>
+
+    <div class = "basis-2/3 w-2/3 h-4/5 left-1/3 my-2 ml-2 space-y-2 fixed overflow-x-scroll" id = "top-20">
 
         <form>
 
-        <div class="grid gap-6 mb-6 md:grid-cols-2 lg:grid-cols-3 relative">
+        <div class="grid gap-6 mb-6 md:grid-cols-2 relative">
 
             {#each seatlist as seat,index}
 

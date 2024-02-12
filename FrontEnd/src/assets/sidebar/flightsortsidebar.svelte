@@ -174,7 +174,7 @@ async function filterTime() {
 
 
 
-      <SidebarItem label="Set the upper price range" class = "text-gray-400 hover:bg-gray-800" on:click =  { handleClick } >
+      <SidebarItem label="Set the max price" class = "text-gray-400 hover:bg-gray-800" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
         <DollarOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -196,7 +196,7 @@ async function filterTime() {
         
       </SidebarItem>
       
-      <SidebarItem label= "Set the lower price range" class = "text-gray-400 hover:bg-gray-800" on:click =  { handleClick }>
+      <SidebarItem label= "Set the min price" class = "text-gray-400 hover:bg-gray-800" on:click =  { handleClick }>
         <svelte:fragment slot="icon">
           <DollarOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
         </svelte:fragment>

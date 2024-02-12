@@ -9,7 +9,7 @@
 
     import Sortsidebar from "../../assets/sidebar/flightsortsidebar.svelte";
 
-    
+    import { getTrainRoute } from "../../api/trainRoute";
 
     import { Alert, Avatar, Badge, Button, ButtonGroup, Modal, Timeline, TimelineItem } from "flowbite-svelte";
 
@@ -38,7 +38,7 @@
 
     let openModal = false, size = 'xs', color = 'blue'
 
-    let openTransitViewModal = false, openLoginAlertModal = false, modalAirLine =  { } 
+    let openRouteViewModal = false, openLoginAlertModal = false, modalRoute =  { } 
 
     
 
@@ -52,11 +52,11 @@
 
     import { push } from 'svelte-spa-router'
 
-    import { airlineSearch } from "../../api/airlineSearch";
+    import { trainSearch } from "../../api/trainSearch";
 
-    let air_line = [], status = 0
+    let train_list = [], status = 0
 
-    storeAirline.subscribe( line => { air_line = line } )
+    //storeAirline.subscribe( line => { air_line = line } )
 
     storeAirlineFilterStatus.subscribe( st => { status = st } )
 
@@ -95,7 +95,7 @@
 
       lastFiveValues[4] = reformatDate(lastFiveValues[4])
 
-      const response = await airlineSearch(lastFiveValues,query)
+      const response = await trainSearch(lastFiveValues,query)
       
       if (!response.ok) {
 
@@ -103,10 +103,10 @@
 
       }
 
-      else air_line = await response.json();
+      else train_list = await response.json();
 
       lastFiveValues[4] = x
-    console.log(air_line);
+    console.log(train_list);
 
     console.log(status)
 
@@ -129,19 +129,18 @@
 
     // });
 
-    function pullString(transits){
+    // function pullString(transits){
 
-      let x = transits[0].transit_port;
+    //   let x = transits[0].transit_port;
 
-      for(var i = 1;i<transits.length; i++){
+    //   for(var i = 1;i<transits.length; i++){
 
-        x = x + "\u00A0" + "\u00A0" + "\u00A0" + "\u00A0"  
+    //     x = x + "\u00A0" + "\u00A0" + "\u00A0" + "\u00A0"  
 
-      }
+    //   }
+    //   return x;
 
-      return x;
-
-    }
+    // }
 
    
 
@@ -189,7 +188,7 @@
 
       lastFiveValues = [ source, dest, seat_number,seat_class,selectedDate ]
 
-      window.location.href = `#/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`
+      window.location.href = `#/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`
 
       
 
@@ -214,7 +213,7 @@
 
       //else {
 
-        push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
+        push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
       //}
 
       storeSelectedAirline.set(air_line)
@@ -230,15 +229,31 @@
 
     }
 
-    function showModal(air_line){
+    async function showModal(station){
 
       if(openLoginAlertModal == false){
 
+        let jsonData = {
+//mail,pass,phone,nid
+        
+          "train_uid" : station.train_uid,
+          "schedule_id" : station.schedule_id,
+          
+        
+    
+        };
+
+        const formData = JSON.stringify(jsonData);
+
+        const response = await getTrainRoute( formData );
+
+        modalRoute = await response.json()
+
         color = "blue"
 
-        openTransitViewModal = true
+        openRouteViewModal = true
 
-        modalAirLine = air_line
+        
 
       }
 
@@ -385,7 +400,7 @@
           {:else}
 
 
-          {#each air_line as airline}
+          {#each train_list as trainline}
   
           
           <!-- -->
@@ -395,28 +410,26 @@
 
             
 
-            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" on:click = { () => showModal(airline)}>
+            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" on:click = { () => showModal(trainline)}>
 
               <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
-                <Avatar size="md" src = { airline.logo } class = "ml-8"/>
-                <Badge color="yellow" class="mt-4 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.air_company_name }</Badge>
+                <Avatar size="md" src = { trainline.logo } class = "ml-8"/>
+                <Badge color="yellow" class="mt-4 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.train_uid }</Badge>
               </div>
 
              
 
               <div class = "justify-center w-24 relative my-auto">
-                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.from_Port }</p>
-                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.departure_time }</Badge>
-                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.departure_date }</p>
+                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.from_Port }</p>
+                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.departure_time }</Badge>
+                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.departure_date).toLocaleDateString() }</p>
               </div>
 
               <div class = "my-auto relative w-96 " >
 
               <Timeline order="horizontal" >
 
-                { #if airline.transits.length == 0 }
-
-                  <TimelineItem title="direct" date="" >
+                  <TimelineItem title="routes" date="" >
     
                     <svelte:fragment slot="icon">
                       <div class="flex items-center">
@@ -430,10 +443,10 @@
     
                   </TimelineItem>
 
-                { :else }
+                
 
              
-                    <TimelineItem title={ pullString(airline.transits) } date="" >
+                    <!-- <TimelineItem title={ pullString(trainline.transits) } date="" >
 
                     
 
@@ -441,9 +454,9 @@
     
                       <svelte:fragment slot="icon">
                         <div class="flex items-center">
-                          <!-- <div class="flex z-10 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-0 ring-white dark:bg-primary-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                           <div class="flex z-10 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-0 ring-white dark:bg-primary-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                             <DotsVerticalOutline class="w-3 h-3 text-primary-600 dark:text-primary-400" />
-                          </div> -->
+                          </div> 
                           <div class="hidden sm:flex w-80 ml-6 bg-rose-600 h-0.5 dark:bg-gray-700" />
                         </div>
                       </svelte:fragment>
@@ -453,13 +466,13 @@
 
                     
 
-                    </TimelineItem>
+                    </TimelineItem> -->
 
                    
 
                   
 
-                {/if}  
+                
   
               </Timeline>
 
@@ -467,23 +480,23 @@
               
 
               <div class = " justify-center w-24 relative my-auto ">
-                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ airline.to_Port }</p>
-                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ airline.arrival_time }</Badge>
-                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.arrival_date }</p>
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.to_Port }</p>
+                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ trainline.arrival_time }</Badge>
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.arrival_date).toLocaleDateString() }</p>
               </div>
 
             
 
               <div class = " justify-center w-24 relative my-auto">
                 
-                <p class="mt-1/2 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ airline.duration_hour } h { airline.duration_minutes} m</p>
+                <p class="mt-1/2 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.duration_hour } h { trainline.duration_minutes} m</p>
               </div>
 
               <div class = " border-l border-gray-800 justify-center w-28 relative my-2">
                 
-                <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { airline.cost_class }</Badge>
+                <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { trainline.cost_class }</Badge>
 
-                <Button shadow color="dark" on:click = { () => showGrid(airline)}> Book </Button> 
+                <Button shadow color="dark" on:click = { () => showGrid(trainline)}> Book </Button> 
              
               </div>
 
@@ -545,9 +558,9 @@
 
 <!-- <FlightTansitModal openModal = { openTransitViewModal } modalAirLine = { modalAirLine }/> -->
 
-<Modal title= { modalAirLine.air_company_name } bind:open={ openTransitViewModal } { size } { color } autoclose>
+<Modal title= { modalRoute.train_uid } bind:open={ openRouteViewModal } { size } { color } autoclose>
   <Timeline order="vertical" class = "border-rose-600 font-bold">
-    <TimelineItem title={ modalAirLine.to_Port } date={ reformatDatedmony( modalAirLine.departure_date ) }>
+    <TimelineItem title={ modalRoute.routes[0].start } date={ reformatDatedmony( new Date(  modalRoute.routes[0].date ).toLocaleDateString() ) }>
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
           
@@ -555,16 +568,16 @@
 
         </span>
       </svelte:fragment>
-      <p class=" text-base font-bold text-gray-500 dark:text-gray-400">{ modalAirLine.departure_time }</p>
-      <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400">{ modalAirLine.flight_id }</p>
+      <p class=" text-base font-bold text-gray-500 dark:text-gray-400">{ modalRoute.routes[0].departure_time }</p>
+      <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400">{ modalRoute.flight_id }</p> -->
       
     </TimelineItem>
 
-    { #if modalAirLine.transits.length != 0 }
+    { #if modalRoute.routes.length != 0 }
 
-      { #each modalAirLine.transits as transit }
+      { #each modalRoute.routes as route }
 
-        <TimelineItem title={ transit.transit_port } date={ reformatDatedmony( new Date(transit.date).toLocaleDateString() ) }>
+        <TimelineItem title={ route.start } date={ reformatDatedmony( new Date(route.date).toLocaleDateString() ) }>
           <svelte:fragment slot="icon">
             <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
           
@@ -572,8 +585,8 @@
 
             </span>
           </svelte:fragment>
-          <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { transit.time } </p>
-          <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400"> { transit.flight_id } </p>
+          <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { route.departure_time } </p>
+          <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400"> { transit.flight_id } </p> -->
           
         </TimelineItem>
 
@@ -582,7 +595,7 @@
     {/if}
     
 
-    <TimelineItem title={ modalAirLine.from_Port } date={ reformatDatedmony(modalAirLine.arrival_date) }>
+    <!-- <TimelineItem title={ modalAirLine.from_Port } date={ reformatDatedmony(modalAirLine.arrival_date) }>
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
         
@@ -591,7 +604,7 @@
         </span>
       </svelte:fragment>
       <p class="text-base font-bond text-gray-500 dark:text-gray-400"> { modalAirLine.arrival_time } </p>
-    </TimelineItem>
+    </TimelineItem> -->
 
   </Timeline>
 </Modal>
