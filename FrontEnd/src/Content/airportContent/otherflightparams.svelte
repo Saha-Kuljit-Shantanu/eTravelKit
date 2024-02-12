@@ -2,7 +2,7 @@
 
     import { Label,  Button,  Select, ButtonGroup } from 'flowbite-svelte';
 
-    import DatePicker from '../datepickers/journeydatepicker.svelte'
+    import DatePicker from '../../assets/datepickers/journeydatepicker.svelte'
 
     import { storeSeatNumber, storePlaneClass } from "../../store/store"
 
@@ -42,11 +42,11 @@
 
     export let placeholder_status
 
-    const isSmallDevice = window.innerWidth <= 600
+    const isSmallDevice = window.innerWidth <= 837
 
 </script>
 
-<div class = "relative w-full space-y-6" >
+<div class = "relative w-full space-y-3 md:space-y-6" >
         
     <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
 
@@ -80,7 +80,12 @@
 
       </Label> -->
 
-       { #if isSmallDevice === false }<DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } /> {/if}
+       { #if isSmallDevice === false }
+
+        <DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } /> 
+       
+
+       {/if}
 
       
 
@@ -88,7 +93,7 @@
 
   {#if isSmallDevice === true} 
 
-    <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
+    <ButtonGroup class="w-full border-0 border-gray-400 rounded-lg ">
 
 
       <DatePicker selectedDate = { selectedDate } default_Date = { defaultDate } /> 

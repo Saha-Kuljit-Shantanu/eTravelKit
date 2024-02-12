@@ -91,7 +91,7 @@
   
   <form on:submit={handleSubmit} >
   
-  <div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
+    <div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
   
       <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
         

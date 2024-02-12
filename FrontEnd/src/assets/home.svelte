@@ -9,6 +9,8 @@
 
     import AirplaneHomeChild from "./homeChild/airplaneHomeChild.svelte";
 
+    import TrainHomeChild from "./homeChild/trainHomeChild.svelte"
+
     import HistoryHomeChild from "./homeChild/historyHomeChild.svelte";
 
 
@@ -134,6 +136,13 @@
 
         
          <AirplaneHomeChild />
+        
+        {/if}
+
+        {#if route == "train"}
+
+        
+         <TrainHomeChild />
         
         {/if}
 

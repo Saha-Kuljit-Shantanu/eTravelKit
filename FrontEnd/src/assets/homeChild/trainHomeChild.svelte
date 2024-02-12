@@ -2,8 +2,8 @@
 
 
 
-import Endpoints from "../../Content/airportContent/portEndpoints.svelte"
-import Otherflightparams from "../../Content/airportContent/otherflightparams.svelte";
+import Endpoints from "../../Content/trainStationContent/stationEndpoints.svelte"
+import Othertrainparams from "../../Content/trainStationContent/othertrainparams.svelte";
 
 import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../../store/store"
 
@@ -30,7 +30,7 @@ async function airline_query(){
 
   storeJourneyDate.subscribe( val => { selectedDate = val } )
 
-  push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`)
+  push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`)
 
 }
 
@@ -83,7 +83,7 @@ function validateInputs() {
 
       <div class="container w-1/2 top-84 md:top-72 absolute">
 
-        <Otherflightparams defaultDate = { new Date() }  placeholder_status = "true" />
+        <Othertrainparams defaultDate = { new Date() }  placeholder_status = "true" />
 
       </div>
 

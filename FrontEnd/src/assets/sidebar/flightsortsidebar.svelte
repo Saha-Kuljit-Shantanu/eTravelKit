@@ -1,6 +1,6 @@
 <script>
 
-  import { Sidebar, SidebarGroup, SidebarItem, SidebarWrapper, Input, Button, Label } from 'flowbite-svelte';
+  import { Sidebar, SidebarGroup, SidebarItem, SidebarWrapper, Input, Button, Modal } from 'flowbite-svelte';
   import { GridSolid, TicketOutline, DollarOutline , ArrowRightFromBracketSolid, QuestionCircleOutline } from 'flowbite-svelte-icons';
   import '@fortawesome/fontawesome-free/css/all.min.css';
   import '@fortawesome/fontawesome-free/css/all.css';
@@ -27,6 +27,12 @@
 let upRange = 3000, lowRange = 100
 
 let lastFiveValues = []
+
+//let openPriceRangeModal = false
+
+let openModal = false, size = 'xs', color='red'
+
+
 
 // const url = new URL(window.location.href)
 
@@ -70,10 +76,15 @@ import { storeAirline, storeAirlineFilterStatus } from "../../store/store"
 
 import { airlineSearch } from '../../api/airlineSearch';
 
+//import PriceAlertModal from '../modals/priceAlertModal.svelte'
+
 async function filterMoney() {
 
   if (lowRange > upRange) {
+    
     warningMessage = 'Lower value cannot be higher than the upper limit.';
+    openModal = true ;
+
   }
 
   else{
@@ -157,9 +168,9 @@ async function filterTime() {
 
 
 
-<Sidebar >
-  <SidebarWrapper class = "bg-gray-800 h-screen rounded-xl mt-4" >
-    <SidebarGroup>
+<Sidebar class = "h-screen">
+  <SidebarWrapper class = "bg-gray-800 h-2/5 md:h-3/5 rounded-xl mt-4 w-fit md:w-full " >
+    <SidebarGroup >
 
 
 
@@ -191,7 +202,7 @@ async function filterTime() {
         </svelte:fragment>
       </SidebarItem>
 
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick}>
+      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  { handleClick }>
 
         <svelte:fragment slot="icon"  >
             
@@ -201,7 +212,7 @@ async function filterTime() {
         
       </SidebarItem>
 
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick}>
+      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  { handleClick }>
 
         <svelte:fragment slot="icon"  >
             
@@ -221,7 +232,7 @@ async function filterTime() {
       </SidebarItem>
 
 
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick} >
+      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
 
         <input type="range" id="time-slider" class = "w-full" min={timeRange[0]} max={up} step="1" bind:value={timeRange[1]} />
@@ -230,7 +241,7 @@ async function filterTime() {
       </SidebarItem>
 
 
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick} >
+      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  { handleClick } >
 
         <svelte:fragment slot="icon"  >
 
@@ -250,5 +261,7 @@ async function filterTime() {
   </SidebarWrapper>
 </Sidebar>
 
+<!-- <PriceAlertModal openModal = { openPriceRangeModal } warningMessage = { warningMessage }/> -->
 
+<Modal title= "ALERT" bind:open={ openModal } { size } { color } autoclose>{ warningMessage }</Modal>
 

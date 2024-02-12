@@ -9,7 +9,7 @@
 </script>
 
 
-<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden space-y-36">
+<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
 
   <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
     
@@ -23,38 +23,67 @@
   
   </div>
 
-  <div class = "basis-2/3 w-full h-4/5 left-0 top-4 fixed overflow-x-hidden"> 
+  <div class = "basis-2/3 w-full h-4/5 left-0 fixed overflow-x-scroll" id = "top-adjust"> 
 
     <div class="flex flex-row w-full">
 
-      <div class = "basis-1/5 h-full fixed mb-2 " id = "top-20" > <Detailsidebar /> </div>
-        <div class = "w-screen absolute left_40 overflow-y-scroll space-y-4 mt-4 ">  
+      
+
+      <div class = "w-auto absolute left-adjust-grid space-y-4 mt-4  " >  
               
               
-            <AirplaneGrid />
+          <AirplaneGrid />
               
-            <div></div>
+          <div></div>
             
-        </div>
-        
       </div>
 
+      <div class = "basis-1/5 h-full w-1/3 fixed mb-8 " id = "top-adjust" > <Detailsidebar /> </div>
+
+
+      
+      
+        
     </div>
+
+    
+
+  </div>
 
 </div>
 
 <style>
 
-  #top-20 {
+  @media only screen and (max-width: 2048px){
 
-    top: 20%
+    #top-adjust {
+
+      top: 20%
+
+    }
+
+  }
+
+  @media only screen and (max-width: 2048px){
+
+    .left-adjust-grid {
+
+      left: 40%;
+
+    }
 
   }
 
-  .left_40 {
+  @media only screen and (max-width: 600px){
 
-    left: 40%;
+    .left-adjust-grid {
+
+      left: 60%;
+
+    }
 
   }
+
+  
 
 </style>

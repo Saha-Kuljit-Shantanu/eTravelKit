@@ -3,9 +3,9 @@
     import Homenavigation from "../../assets/navigation/homenavigation.svelte";
 
 
-    import Endpoints from "../../Content/airportContent/portEndpoints.svelte";
+    import Endpoints from "../../Content/trainStationContent/stationEndpoints.svelte";
 
-    import Otherflightparams from "../../Content/airportContent/otherflightparams.svelte";
+    import Othertrainparams from "../../Content/trainStationContent/othertrainparams.svelte";
 
     import Sortsidebar from "../../assets/sidebar/flightsortsidebar.svelte";
 
@@ -305,7 +305,7 @@
             
                   <div class="container w-1/2 top-20 left-1/4 absolute">
             
-                    <Otherflightparams defaultDate = { lastFiveValues[4] } placeholder_status = "false"/>
+                    <Othertrainparams defaultDate = { lastFiveValues[4] } placeholder_status = "false"/>
             
                   </div>
             

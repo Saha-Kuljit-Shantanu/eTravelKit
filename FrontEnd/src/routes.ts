@@ -1,12 +1,15 @@
 
 import homeHome from "./assets/homeHome.svelte"
 import airplaneHome from "./assets/airplaneHome.svelte"
+import trainHome from "./assets/trainHome.svelte"
 import login from "./modules/auth_module/login.svelte"
 import signupform from "./modules/auth_module/signupform.svelte"
 import profile from "./modules/flight_module/airplaneSeating.svelte"
 import airplaneQuery from "./modules/flight_module/airplaneQuery.svelte"
+import trainQuery from "./modules/train_module/trainQuery.svelte"
 import airplaneGrid from "./modules/flight_module/airplaneSeating.svelte"
 import ticketHistory from "./modules/ticket_history/ticket_history_home.svelte"
+import airplanePassengers from "./modules/flight_module/airplanePassengers.svelte"
 
 // let username = ''
 
@@ -39,11 +42,17 @@ export const routes = {
 
     '/airplane/:source/:dest/:seatNumber/:seatClass/:selectedDate?' : airplaneQuery,
 
+    '/train/:source/:dest/:seatNumber/:seatClass/:selectedDate?' : trainQuery,
+
     '/airplane' : airplaneHome,
 
     '/airplane/:source/:dest/:seatNumber/:seatClass/:selectedDate?/:flight_id' : airplaneGrid,
 
+    '/airplane/:username/:source/:dest/:seatNumber/:seatClass/:selectedDate?/:flight_id/bookseat' : airplanePassengers,
+
     '/history/:username' : ticketHistory,
+
+    '/train' : trainHome,
 
     
 
