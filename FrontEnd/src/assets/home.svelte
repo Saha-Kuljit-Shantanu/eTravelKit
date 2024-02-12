@@ -9,6 +9,10 @@
 
     import AirplaneHomeChild from "./homeChild/airplaneHomeChild.svelte";
 
+    import TrainHomeChild from "./homeChild/trainHomeChild.svelte"
+
+    import HistoryHomeChild from "./homeChild/historyHomeChild.svelte";
+
 
     export let route;
     
@@ -98,7 +102,7 @@
  
 </div> -->
 
-<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-hidden">
+<div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-scroll md:overflow-x-hidden">
 
   <div class = "basis-1/3 bg-yellow-300 w-full h-1/5 top-0 left-0 fixed " >
     
@@ -112,12 +116,12 @@
   
   </div>
 
-  <div class = "basis-2/3 w-full h-4/5 mt-2 left-0 fixed overflow-y-scroll overflow-x-hidden" id = "top-20"> 
+  <div class = "basis-2/3 w-full h-4/5 mt-2 left-0 fixed overflow-y-scroll overflow-x-scroll md:overflow-x-hidden" id = "top-20"> 
 
     <div class="flex flex-row w-full ">
 
       <div class = "basis-1/5 h-full fixed mb-2 " id = "top-20" > <Homesidebar /> </div>
-      <div class = "w-screen pl-96 space-y-20">  
+      <div class = "w-screen pl-48 md:pl-72 lg:pl-96 space-y-20">  
 
         
         {#if route == "home"}
@@ -133,6 +137,19 @@
         
          <AirplaneHomeChild />
         
+        {/if}
+
+        {#if route == "train"}
+
+        
+         <TrainHomeChild />
+        
+        {/if}
+
+        {#if route == "ticket_history"}
+
+          <HistoryHomeChild />
+
         {/if}
         
       <div></div>

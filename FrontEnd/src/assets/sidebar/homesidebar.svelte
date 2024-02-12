@@ -22,18 +22,20 @@
 
     let homepath = "/#/home/" + username
 
+    let ticketpath = "/#/history/" + username
+
 
 
 
 </script>
 
-  <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass}>
-    <SidebarWrapper class = "bg-gray-800 h-screen">
+  <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} class = "h-screen" >
+    <SidebarWrapper class = "bg-gray-800 h-4/5 w-fit md:w-full">
       <SidebarGroup>
 
 
 
-        <SidebarItem label="Dashboard" href =  "{homepath}" >
+        <SidebarItem label="Dashboard" href =  "{homepath}"  >
           <svelte:fragment slot="icon">
             
             <GridSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -45,16 +47,16 @@
         
 
 
-        <SidebarItem label="Inbox" >
+        <!-- <SidebarItem label="Inbox" >
           <svelte:fragment slot="icon">
             <MailBoxSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
           <svelte:fragment slot="subtext">
             <span class="inline-flex justify-center items-center p-3 ms-3 w-3 h-3 text-sm font-medium text-primary-600 bg-primary-200 rounded-full dark:bg-primary-900 dark:text-primary-200"> 3 </span>
           </svelte:fragment>
-        </SidebarItem>
+        </SidebarItem> -->
         
-        <SidebarItem label="Ticket History">
+        <SidebarItem label="Ticket History" href = "{ticketpath}">
           <svelte:fragment slot="icon">
             <TicketOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
@@ -69,16 +71,18 @@
     </SidebarGroup>
     <SidebarGroup border>
 
-        <SidebarItem label="Hotel Booking" >
+        <!-- <SidebarItem label="Hotel Booking" >
           <svelte:fragment slot="icon">
             
             <i class="fa-solid fa-hotel"></i>
 
             </svelte:fragment>
-          <!-- <svelte:fragment slot="subtext">
+          
+        </SidebarItem> -->
+
+        <!-- <svelte:fragment slot="subtext">
             <span class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300" > Pro </span>
           </svelte:fragment> -->
-        </SidebarItem>
 
 
         <SidebarItem label="Airplane" href="/#/airplane" >
@@ -97,7 +101,7 @@
         </SidebarItem>
 
 
-        <SidebarItem label="Train" >
+        <SidebarItem label="Train" href="/#/train" >
 
             <svelte:fragment slot="icon">
               

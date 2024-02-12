@@ -41,10 +41,10 @@
   
   
   
-  <div class = "relative">
+  <div class = "relative min-w-fit border-gray-400 border-4 rounded-lg md:border-none">
     
     <i class="fa-solid fa-xl fa-calendar-check absolute left-3 top-1/2 cursor-pointer"></i>
-    <input bind:this={ inputElement } type="text" id="datepicker" class = "pl-10 w-full rounded-none bg-gray-50 border-1 border-gray-300 h-18 hover:bg-green-200" on:change={ () => { storeJourneyDate.set(selectedDate) , default_Date = selectedDate}} />
+    <input bind:this={ inputElement } type="text" id="datepicker" class = "pl-10 w-fit md:w-full h-full rounded-sm bg-gray-200 lg:bg-gray-50 border-2 border-gray-800 hover:bg-green-200 border-none" on:change={ () => { storeJourneyDate.set(selectedDate) , default_Date = selectedDate}} />
     
   
   </div>

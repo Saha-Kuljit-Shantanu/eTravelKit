@@ -30,6 +30,10 @@ export const lowerMoneyLimit = writable(0);
 
 export const upperMoneyLimit = writable(1000);
 
+export const storeAirplaneSelectedSeat = writable([])
+
+export const storeFlightTotalCost = writable(0)
+
 
 
 
