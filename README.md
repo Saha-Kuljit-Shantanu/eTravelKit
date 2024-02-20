@@ -1,2 +1,0 @@
-# eTravelKit
-ACADEMIC
