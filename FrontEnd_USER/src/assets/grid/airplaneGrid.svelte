@@ -190,7 +190,10 @@
 
       storeAirplaneSelectedSeat.set(selectList)
 
-      const data = await response.json()
+      window.sessionStorage.setItem("storeAirplaneSelectedSeat",JSON.stringify(selectList) )
+      window.sessionStorage.setItem("storeFlightTotalCost",totalPrice.toString() )
+
+      const data = await response.json() 
 
       lastSixValues[4] = x
 

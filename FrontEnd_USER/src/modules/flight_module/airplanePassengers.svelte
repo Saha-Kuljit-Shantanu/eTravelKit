@@ -14,7 +14,13 @@
 
     let date_of_Birth = []
 
-    storeAirplaneSelectedSeat.subscribe( list => { seatlist = list})
+    //storeAirplaneSelectedSeat.subscribe( list => { seatlist = list})
+
+    seatlist = JSON.parse(window.sessionStorage.getItem("storeAirplaneSelectedSeat"))
+
+    console.log(seatlist)
+
+    console.log(parseInt(window.sessionStorage.getItem("storeFlightTotalCost"),10) + 24)
 
     let gender = [
 
