@@ -37,3 +37,14 @@ export const seatType = [
     { value: "SHULAV" , name: "SHULAV", },
 
 ]
+
+export const Boggy = [
+
+    { value: 0 , name: "KA", },
+    { value: 1 , name: "KHA", },
+    { value: 2 , name: "GA", },
+    { value: 3 , name: "GHA", },
+    { value: 4 , name: "UMO", },
+    { value: 5 , name: "CHA", },
+
+]

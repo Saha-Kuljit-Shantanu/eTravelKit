@@ -4,7 +4,7 @@
 
     import { airports } from "../../data/airport_name"
 
-    import {storeSource, storeDest} from "../../store/store"
+    import { storeSource, storeDest } from "../../store/store"
 
 
     let lastFiveValues = []

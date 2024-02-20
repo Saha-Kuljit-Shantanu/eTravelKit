@@ -48,7 +48,7 @@
     import { Card } from 'flowbite-svelte';
     import { onMount } from "svelte";
     
-    import { storeAirline, storeAirlineFilterStatus, storeAirlineQuery, storeSelectedAirline } from "../../store/store"
+    import { storeAirline, storeTrainFilterStatus, storeTrainQuery, storeSelectedTrain } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
@@ -58,9 +58,9 @@
 
     //storeAirline.subscribe( line => { air_line = line } )
 
-    storeAirlineFilterStatus.subscribe( st => { status = st } )
+    storeTrainFilterStatus.subscribe( st => { status = st } )
 
-    storeAirlineQuery.subscribe( q => { query = q } )
+    storeTrainQuery.subscribe( q => { query = q } )
 
     function reformatDate(datedmy){
 
@@ -168,7 +168,8 @@
 
     }
 
-    import { storeSource, storeDest, storeSeatNumber, storePlaneClass, storeJourneyDate } from "../../store/store"
+    import { storeSource, storeDest, storeSeatNumber, storeTrainCoach, storeJourneyDate } from "../../store/store"
+    //import { routes } from "../../routes";
 
     let source =  lastFiveValues[0], dest = lastFiveValues[1], seat_number= parseInt(lastFiveValues[2],10), seat_class= lastFiveValues[3], selectedDate= lastFiveValues[4]
 
@@ -182,7 +183,7 @@
 
       storeSeatNumber.subscribe( val => { if(val != 0 ) seat_number = val} )
 
-      storePlaneClass.subscribe( val => { if(val != "Not yet" ) seat_class = val } )
+      storeTrainCoach.subscribe( val => { if(val != "Not yet" ) seat_class = val } )
 
       storeJourneyDate.subscribe( val => { selectedDate = val } )
 
@@ -198,7 +199,7 @@
       
     }
 
-    async function showGrid(air_line){
+    async function showGrid(train){
 
       // /seat_details/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}
 
@@ -213,12 +214,12 @@
 
       //else {
 
-        push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
+        push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${train.train_uid}`)
       //}
 
-      storeSelectedAirline.set(air_line)
+      storeSelectedTrain.set(train)
 
-      console.log(air_line)
+      console.log(train)
 
       
 
@@ -248,6 +249,10 @@
         const response = await getTrainRoute( formData );
 
         modalRoute = await response.json()
+
+        modalRoute = modalRoute[0]
+
+        console.log(modalRoute)
 
         color = "blue"
 
@@ -420,8 +425,8 @@
              
 
               <div class = "justify-center w-24 relative my-auto">
-                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.from_Port }</p>
-                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.departure_time }</Badge>
+                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.routes[0].start }</p>
+                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.routes[0].departure_time  }</Badge>
                 <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.departure_date).toLocaleDateString() }</p>
               </div>
 
@@ -480,8 +485,8 @@
               
 
               <div class = " justify-center w-24 relative my-auto ">
-                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.to_Port }</p>
-                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ trainline.arrival_time }</Badge>
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.routes[trainline.routes.length-1].start }</p>
+                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ trainline.routes[trainline.routes.length-1].departure_time }</Badge>
                 <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.arrival_date).toLocaleDateString() }</p>
               </div>
 
@@ -564,7 +569,7 @@
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
           
-          <i class="fa-solid fa-plane-up w-3 h-3 text-primary-600 dark:text-primary-400" ></i>
+          <i class="fa-solid fa-train w-3 h-3 text-primary-600 dark:text-primary-400" ></i>
 
         </span>
       </svelte:fragment>
@@ -575,36 +580,40 @@
 
     { #if modalRoute.routes.length != 0 }
 
-      { #each modalRoute.routes as route }
+      { #each modalRoute.routes as route,index }
 
-        <TimelineItem title={ route.start } date={ reformatDatedmony( new Date(route.date).toLocaleDateString() ) }>
-          <svelte:fragment slot="icon">
-            <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
-          
-              <i class="fa-solid fa-map-marker-alt w-3 h-3 text-green-600 dark:text-green-400" ></i>
+        {#if index != 0 && index != modalRoute.routes.length-1 }
 
-            </span>
-          </svelte:fragment>
-          <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { route.departure_time } </p>
-          <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400"> { transit.flight_id } </p> -->
-          
-        </TimelineItem>
+          <TimelineItem title={ route.start } date={ reformatDatedmony( new Date(route.date).toLocaleDateString() ) }>
+            <svelte:fragment slot="icon">
+              <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
+            
+                <i class="fa-solid fa-map-marker-alt w-3 h-3 text-green-600 dark:text-green-400" ></i>
+
+              </span>
+            </svelte:fragment>
+            <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { route.departure_time } </p>
+            <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400"> { transit.flight_id } </p> -->
+            
+          </TimelineItem>
+
+        {/if }
 
       { /each }
 
     {/if}
     
 
-    <!-- <TimelineItem title={ modalAirLine.from_Port } date={ reformatDatedmony(modalAirLine.arrival_date) }>
+    <TimelineItem title={ modalRoute.routes[modalRoute.routes.length-1].start } date={ reformatDatedmony( new Date(modalRoute.routes[modalRoute.routes.length-1].date).toLocaleDateString() ) }>
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
         
-          <i class="fa-solid fa-plane-up w-3 h-3 text-primary-600 dark:text-primary-400" ></i>
+          <i class="fa-solid fa-train w-3 h-3 text-primary-600 dark:text-primary-400" ></i>
         
         </span>
       </svelte:fragment>
-      <p class="text-base font-bond text-gray-500 dark:text-gray-400"> { modalAirLine.arrival_time } </p>
-    </TimelineItem> -->
+      <p class="text-base font-bond text-gray-500 dark:text-gray-400"> { modalRoute.routes[modalRoute.routes.length-1].departure_time } </p>
+    </TimelineItem>
 
   </Timeline>
 </Modal>
