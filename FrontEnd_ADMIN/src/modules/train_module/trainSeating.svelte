@@ -1,8 +1,8 @@
 <script>
 
-    import Homenavigation from '../../assets/navigation/homenavigation.svelte';
+    import Homenavigation from '../../assets/train/navigation/homenavigation.svelte';
     import Detailsidebar from "../../assets/sidebar/trainjourneysidebar.svelte";
-    import TrainGrid from '../../assets/grid/trainGrid.svelte';
+    import TrainGrid from '../../assets/train/trainGrid.svelte';
 
     
 

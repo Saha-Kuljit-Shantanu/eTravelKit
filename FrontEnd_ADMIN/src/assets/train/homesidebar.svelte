@@ -56,12 +56,12 @@
 </script>
 
   <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} class = "h-screen" >
-    <SidebarWrapper class = "bg-gray-800 h-fit w-fit md:w-full">
+    <SidebarWrapper class = "bg-gray-300 h-fit w-fit md:w-full">
       <SidebarGroup>
 
 
 
-        <SidebarItem label="Dashboard" href =  "{homepath}"  >
+        <SidebarItem label="Dashboard" href =  "{homepath}" class = "bg-gray-400" >
           <svelte:fragment slot="icon">
             
             <GridSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -83,21 +83,29 @@
         </SidebarItem> -->
         
         
-        <SidebarDropdownWrapper class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-800 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="Train List" >
+        <SidebarDropdownWrapper class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="Train List" >
           <svelte:fragment slot="icon">
-            <ListOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+            <ListOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
-          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-800 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-735" href = "{trainpath}/Agnibina-735/route" on:click = { () => storeTrain("Agnibina-735") } />
-          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-800 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-736" href = "{trainpath}/Agnibina-736/route" on:click = { () => storeTrain("Agnibina-736") } />
+          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-735" href = "{trainpath}/Agnibina-735/route" on:click = { () => storeTrain("Agnibina-735") } />
+          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-736" href = "{trainpath}/Agnibina-736/route" on:click = { () => storeTrain("Agnibina-736") } />
           <!-- <SidebarDropdownItem label="Invoice" /> -->
         </SidebarDropdownWrapper>
       
 
-        <SidebarItem label="Configure">
+        <SidebarItem label="Add Train" class = "bg-gray-400" >
           <svelte:fragment slot="icon">
-            <PlusOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+            <PlusOutline class="w-5 h-5 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
         </SidebarItem>
+
+        <SidebarItem label="Info" class = "bg-gray-400" >
+          <svelte:fragment slot="icon">
+            <PlusOutline class="w-5 h-5 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+          </svelte:fragment>
+        </SidebarItem>
+
+        
 
     </SidebarGroup>
     <!-- <SidebarGroup border> -->

@@ -50,6 +50,10 @@
        //window.location.reload()
 
     }
+    // function fade(
+    //     node: Element,
+    //     { delay, duration, easing }?: FadeParams | undefined
+    // ): TransitionConfig;
 
 </script>
 
@@ -61,10 +65,10 @@
 
         <Card >
 
-        <h2 class = "font-bold text-left mb-8 font-serif" > Upstream </h2>
+        <h2 class = "font-bold text-left mb-8 font-serif" > Route-1 </h2>
 
 
-            <Timeline order="vertical" class = "border-rose-600 font-bold">
+            <Timeline order="vertical" class = "border-rose-600 font-bold event fade-in">
 
                 { #each trainstationList as stoppage,idx }
 
@@ -79,7 +83,7 @@
                     <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> &nbsp; </p>
                     
                     
-                    <Select items= { stationList } id="text" placeholder = "Add Route " bind:value = { Route[idx] } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-1/2 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => addRoute(idx) } />
+                    <Select items= { stationList } id="text" placeholder = "add route" bind:value = { Route[idx] } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-1/2 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => addRoute(idx) } />
 
                     
                     
@@ -96,7 +100,7 @@
 
         <Card>
 
-            <h2 class = "font-bold text-left mb-8 font-serif" > Downstream </h2>
+            <h2 class = "font-bold text-left mb-8 font-serif" > Route-2 </h2>
 
 
             <Timeline order="vertical" class = "border-rose-600 font-bold">

@@ -29,16 +29,18 @@
 
     <Navtitle />
 
-  </div>
+</div>
 
-  <div class = "basis-1/5 h-one-tenth w-full ml-72 mt-16" >
+  <div class = "basis-1/5 h-one-tenth w-full ml-96 mt-24" >
 
-    {#if route === "trainroute" || route === "trainsched" || route === "traincoach"}
+    {#if route === "route" || route === "schedule" || route === "coach" || route === "ticketstats" || route === "config" }
 
       <NavUl {activeUrl} {activeClass} {nonActiveClass}>
         <NavLi href = "{abspath}/route" class = "text-lg cursor-pointer">Route</NavLi>
         <NavLi href = "{abspath}/coach" class = "text-lg cursor-pointer">Coach</NavLi>
         <NavLi href = "{abspath}/sched" class = "text-lg cursor-pointer">Schedule</NavLi>
+        <NavLi href = "{abspath}/config" class = "text-lg cursor-pointer">Config</NavLi>
+        <NavLi href = "{abspath}/stats" class = "text-lg cursor-pointer">Stats</NavLi>
       </NavUl>
 
     {/if}

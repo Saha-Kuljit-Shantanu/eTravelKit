@@ -2,8 +2,8 @@
     import { Label, Input, Button, Checkbox, A } from 'flowbite-svelte';
     
 
-    import Homenavigation from '../../assets/navigation/homenavigation.svelte';
-    import Homenavpopover from '../../assets/popovers/homenavpopover.svelte';
+    import Homenavigation from '../../assets/train/navigation/homenavigation.svelte';
+    import Homenavpopover from '../../assets/train/popovers/homenavpopover.svelte';
     import DatePicker from '../../assets/datepickers/formdatepicker.svelte';
 
 

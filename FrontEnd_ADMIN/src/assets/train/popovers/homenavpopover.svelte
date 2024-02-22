@@ -3,7 +3,7 @@
     import { Popover } from 'flowbite-svelte'
     let placement = 'bottom'
 
-    import { storecardtitle, storecardcontent } from '../../store/store'
+    import { storecardtitle, storecardcontent } from '../../../store/store'
 
 
     let stringCardTitle;

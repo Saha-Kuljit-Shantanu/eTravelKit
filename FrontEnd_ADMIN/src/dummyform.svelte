@@ -3,7 +3,7 @@
     let BloodGroups = ["A-","A+","AB-","AB+","B-","B+","O-","O+"]
 
     import { Textarea, Input, Button, Label } from 'flowbite-svelte'
-    import Homenavigation from './assets/navigation/homenavigation.svelte';
+    import Homenavigation from './assets/train/navigation/homenavigation.svelte';
 </script>
 
 <main >

@@ -1,6 +1,6 @@
 <script>
 
-    import Homenavigation from '../../assets/navigation/homenavigation.svelte';
+    import Homenavigation from '../../assets/train/navigation/homenavigation.svelte';
 
     import DatePicker from '../../assets/datepickers/formdatepicker.svelte';
 

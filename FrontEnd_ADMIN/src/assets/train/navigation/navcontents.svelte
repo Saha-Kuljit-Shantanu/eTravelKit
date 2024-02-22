@@ -5,7 +5,7 @@
     import { UserCircleOutline } from 'flowbite-svelte-icons'
     //import { storecardstatus, storestringcard } from '../../store/store'
 
-    import { storecardtitle, storecardcontent } from '../../store/store'
+    import { storecardtitle, storecardcontent } from '../../../store/store'
 
     import { push } from 'svelte-spa-router'
 

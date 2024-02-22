@@ -1,20 +1,15 @@
 <script>
-    import Homesidebar from "./sidebar/homesidebar.svelte";
-    import Homenavigation from "./navigation/homenavigation.svelte";
+    import Homesidebar from "./train/homesidebar.svelte";
+    import Homenavigation from "./train/navigation/homenavigation.svelte";
     import Destcarousel from "./carousels/destcarousel.svelte";
-    import Homenavpopover from "./popovers/homenavpopover.svelte";
+    import Homenavpopover from "./train/popovers/homenavpopover.svelte";
     
     import { suggestions } from '../images/suggestions.js';
 
-    
-
-
-    // import AirplaneHomeChild from "./homeChild/airplaneHomeChild.svelte";
-
-    import TrainHomeChildRoute from "./homeChild/trainHomeChildRoute.svelte"
-
-    import TrainHomeChildSched from "./homeChild/trainHomeChildSched.svelte";
-    import TrainHomeChildCoach from "./homeChild/trainHomeChildCoach.svelte";
+    import TrainHomeChildRoute from "./train/trainHomeChildRoute.svelte"
+    import TrainHomeChildSched from "./train/trainHomeChildSched.svelte";
+    import TrainHomeChildCoach from "./train/trainHomeChildCoach.svelte";
+    import TrainHomeChildConfig from "./train/trainHomeChildConfig.svelte";
 
 
     export let route;
@@ -109,6 +104,8 @@
  
 </div> -->
 
+<!-- change the AddRoute to only '+' icon -->
+
 <div class = "flex flex-col w-screen h-screen fixed overflow-y-hidden overflow-x-scroll md:overflow-x-hidden">
 
   <div class = "basis-1/3 bg-gray-300 w-full h-16per top-0 left-0 fixed " >
@@ -184,25 +181,30 @@
 
       <div class = "w-screen pl-48 md:pl-72 lg:pl-96 space-y-12">
 
-        {#if route == "traincoach"}
+        {#if route == "coach"}
 
         
          <TrainHomeChildCoach />
         
         {/if}
 
-        {#if route == "trainroute"}
+        {#if route == "route"}
 
         
          <TrainHomeChildRoute />
         
         {/if}
 
-        {#if route == "trainsched"}
+        {#if route == "sched"}
 
           <TrainHomeChildSched />
 
         {/if} 
+        {#if route == "config"}
+
+        <TrainHomeChildConfig />
+
+      {/if} 
         
       <div></div>
       
