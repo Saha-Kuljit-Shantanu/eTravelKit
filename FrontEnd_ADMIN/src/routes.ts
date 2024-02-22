@@ -1,12 +1,12 @@
 
 import homeHome from "./assets/homeHome.svelte"
 
-import trainHomeRoute from "./assets/train/trainHomeRoute.svelte"
+import trainHomeRoute from "./modules/train_module/trainHomeRoute.svelte"
 
-import trainHomeSched from "./assets/train/trainHomeSched.svelte"
+import trainHomeSched from "./modules/train_module/trainHomeSched.svelte"
 
-import trainHomeCoach from "./assets/train/trainHomeCoach.svelte"
-import trainHomeConfig from './assets/train/trainHomeConfig.svelte'
+import trainHomeCoach from "./modules/train_module/trainHomeCoach.svelte"
+import trainHomeConfig from './modules/train_module/trainHomeConfig.svelte'
 
 // import trainHomeConfig from "./assets/train/trainHomeConfig.svelte"
 

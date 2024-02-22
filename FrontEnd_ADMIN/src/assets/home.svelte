@@ -1,15 +1,16 @@
 <script>
-    import Homesidebar from "./train/homesidebar.svelte";
-    import Homenavigation from "./train/navigation/homenavigation.svelte";
+	  //import homeside bar from modules directory
+    import Homesidebar from "../modules/train_module/homesidebar.svelte";
+    import Homenavigation from "../modules/train_module/navigation/homenavigation.svelte";
     import Destcarousel from "./carousels/destcarousel.svelte";
-    import Homenavpopover from "./train/popovers/homenavpopover.svelte";
+    import Homenavpopover from "../modules/train_module/popovers/homenavpopover.svelte";
     
     import { suggestions } from '../images/suggestions.js';
 
-    import TrainHomeChildRoute from "./train/trainHomeChildRoute.svelte"
-    import TrainHomeChildSched from "./train/trainHomeChildSched.svelte";
-    import TrainHomeChildCoach from "./train/trainHomeChildCoach.svelte";
-    import TrainHomeChildConfig from "./train/trainHomeChildConfig.svelte";
+    import TrainHomeChildRoute from "../modules/train_module/trainHomeChildRoute.svelte"
+    import TrainHomeChildSched from "../modules/train_module/trainHomeChildSched.svelte";
+    import TrainHomeChildCoach from "../modules/train_module/trainHomeChildCoach.svelte";
+    import TrainHomeChildConfig from "../modules/train_module/trainHomeChildConfig.svelte";
 
 
     export let route;

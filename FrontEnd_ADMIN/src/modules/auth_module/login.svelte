@@ -9,8 +9,8 @@
 
   import { Label, Input, InputAddon, ButtonGroup, Button } from 'flowbite-svelte';
   import { EnvelopeSolid, LockSolid } from 'flowbite-svelte-icons';
-  import Homenavigation from '../../assets/train/navigation/homenavigation.svelte';
-  import Homenavpopover from '../../assets/train/popovers/homenavpopover.svelte';
+  import Homenavigation from '../../modules/train_module/navigation/homenavigation.svelte';
+  import Homenavpopover from '../../modules/train_module/popovers/homenavpopover.svelte';
 
   //import { storeusername } from '../store/store'////////////////
 

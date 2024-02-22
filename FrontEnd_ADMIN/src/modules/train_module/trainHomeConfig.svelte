@@ -1,6 +1,6 @@
 <script>
 
-  import Home from '../home.svelte'
+  import Home from '../../assets/home.svelte'
 
 </script>
 
