@@ -4,6 +4,7 @@
     import Homenavigation from "../modules/train_module/navigation/homenavigation.svelte";
     import Destcarousel from "./carousels/destcarousel.svelte";
     import Homenavpopover from "../modules/train_module/popovers/homenavpopover.svelte";
+    import footer from "./footer.svelte";
     
     import { suggestions } from '../images/suggestions.js';
 

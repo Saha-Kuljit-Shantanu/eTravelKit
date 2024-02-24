@@ -1,6 +1,6 @@
 <script>
 
-    import { NavLi, Select,NavUl, GradientButton, ButtonGroup} from 'flowbite-svelte'
+    import { NavLi, Select,NavUl, GradientButton, ButtonGroup,Navbar} from 'flowbite-svelte'
     import { Card } from 'flowbite-svelte'
     import { Badge } from 'flowbite-svelte'
     import { Button, Modal, Label, Input, Checkbox, Timeline } from 'flowbite-svelte';
@@ -9,6 +9,25 @@
     import { add, compareAsc } from 'date-fns';
     import { dummystationList, stationList } from "../../data/train_details"
     import {TimelineItem} from 'flowbite-svelte'
+    import {Footer, FooterLink, FooterLinkGroup, FooterCopyright} from 'flowbite-svelte'
+
+
+
+    // window.addEventListener('beforeunload', function(event) {
+    // // Cancel the event
+    //     event.preventDefault();
+    //     // Chrome requires returnValue to be set
+    //     event.returnValue = '';
+
+    //     // Display a confirmation dialog
+    //     const confirmationMessage = 'Are you sure you want to leave this page?';
+
+    //     event.returnValue = confirmationMessage; // For Chrome
+    //     return confirmationMessage; // For other browsers
+    // });
+    // window.onbeforeunload = function() {
+    //     return "Are you sure you want to leave?"; 
+    // };
 
 
 
@@ -38,7 +57,7 @@
                         "start": "Rajshahi",
                         "departure_time": "10:00:00",
                         "cost_class": [
-                        100,
+                        400,
                         200,
                         350,
                         ]
@@ -47,9 +66,9 @@
                         "start": "NarayanGanj",
                         "departure_time": "11:00:00",
                         "cost_class": [
-                        120,
-                        220,
-                        370,
+                        0,
+                        0,
+                        0,
                         ]
                     }
                     ],
@@ -144,12 +163,22 @@
 
     console.log(coach)
 
+    /**
+     * Route addition
+     */
 
     //route addition info
     let Route = [], trainstationList = []
     let showList = stationList ;
+    let addRouteCost = false ;
 
-    //export let option = "route"
+    //cost class info
+    let cost_class = [] ;
+    //map the cost class
+    cost_class = data.routes.map(f=>f.cost_class) ;
+    console.log(cost_class)
+
+    //export let option = "routes
 
     trainstationList = data.routes.map(f=>f.start) ;
     trainstationList = ['',...trainstationList.slice()]
@@ -158,10 +187,16 @@
 
     function addRoute(idx){
       trainstationList.splice(idx+1,0,Route[idx])
+      data.routes.splice(idx,0,{
+        "start": Route[idx],
+        "departure_time": "00:00:00",
+        "cost_class": [0,0,0]
+      })
 
-      console.log(idx,trainstationList)
+      console.log(data)
 
       trainstationList = trainstationList
+      remainingStations() ;
 
       return;
 
@@ -174,19 +209,49 @@
       console.log(idx)
       //remove an elemnt by index
       trainstationList.splice(idx,1)
+      data.routes.splice(idx,1) 
       trainstationList = trainstationList
+      
       console.log(trainstationList)
+      remainingStations() ;
     }
 
+    function remainingStations() {
+      // showList = [] ;
+      // stationList.forEach(f=>{
+      //   let found = false ;
+      //   trainstationList.forEach(e => {
+      //     if(f.value.localeCompare(e) === 0 && e.localeCompare('') !== 0){
+      //       found = true ;
+      //     }
+      //   });
+      //   if(found === false){
+      //     showList.push(f) ;
+      //   }
+      // }) ;
+      // return showList ;
     
-    function showStations() {
-      //remove those who are in trainstaionLIst
-      //map stationlist and remove those who are in trainstationList
-      let temp =
-      console.log(temp)
-      showList = temp ;
     }
-    showStations() ;
+    remainingStations() ;
+
+    let modalInfo
+
+    function setRouteCostVisibility(idx) {
+      addRouteCost = true ;
+      modalInfo = {
+        start : trainstationList[idx],
+        end : trainstationList[trainstationList.length-1] ,
+        cost_class : data.routes[idx-1].cost_class,
+        idx : idx-1 ,
+      }
+    }
+
+    function setNewRouteCost(idx) {
+      console.log(modalInfo)
+      data.routes[modalInfo.idx].cost_class = modalInfo.cost_class ;
+      addRouteCost = false ;
+      console.log(data) ;
+    }
   
 </script>
 
@@ -199,7 +264,7 @@
         <div class = "grid grid-cols-3 mx-8 my-8 h-auto">
             {#each Array(data.coaches.length) as _,coach_idx}
               <div class="px-8 py-8">
-                  <Card class = "shadow-lg flex-justify-content" size = "md">
+                  <Card class = "shadow-lg flex-justify-content" size = "md" style="background-color:#ffffee">
                       <Badge rounded color="gray" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold w-fit bg-gray-300 border-black">
                           <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                               <path d="M4 5a2 2 0 0 0-2 2v2.5c0 .6.4 1 1 1a1.5 1.5 0 1 1 0 3 1 1 0 0 0-1 1V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2.5a1 1 0 0 0-1-1 1.5 1.5 0 1 1 0-3 1 1 0 0 0 1-1V7a2 2 0 0 0-2-2H4Z"/>
@@ -293,11 +358,11 @@
 
         </div>
     </Card>
-    <Card size = "xl" class="shadow-none flex-justify-content h-auto">
+    <!-- <Card size = "xl" class="shadow-none flex-justify-content h-auto"> -->
         <!-- <div class="grid grid-cols-2 mx-8 my-8 h-auto"> -->
             <div class = "w-full mt-8 left-1/4 absolute h-fit">
   
-              <Card class="shadow-lg" size="md">
+              <Card class="shadow-lg" size="md" style="background-color:#ffffee">
       
               <h2 class = "font-bold text-left mb-8 font-serif" > Route-1 </h2>
                   <Timeline order="vertical" class = "border-rose-600 font-bold event fade-in">
@@ -314,7 +379,7 @@
                               </span>
                               </svelte:fragment>
                               <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> &nbsp; </p>
-                                <Select items= { stationList } id="text" placeholder = "Add" bind:value = { Route[idx] } class = "mx-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-40 rounded-lg hover:bg-green-200 cursor-pointer flex-justify-content"  on:change = { () => addRoute(idx) } />
+                                <Select items= { showList } id="text" placeholder = "Add" bind:value = { Route[idx] } class = "mx-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-40 rounded-lg hover:bg-green-200 cursor-pointer flex-justify-content"  on:change = { () => addRoute(idx) } />
                               
                               
                           </TimelineItem>
@@ -322,19 +387,19 @@
                               <!-- <div class="grid grid-cols-2 flex-justify-content w-auto"> -->
                                 <p>
                                 <ButtonGroup class="space-x-px" size="sm">
-                                  <Button class="rounded-lg flex-justify-content bg-red-200 hover:bg-red-300" size="sm" >
+                                  <Button class="rounded-none hover:bg-red-500" size="sm" on:click={()=>removeRoute(idx)}>
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
+                                    </svg>
+                                  </Button>
+                                  <Button class="rounded-none flex-justify-content hover:bg-green-300" size="sm" on:click={()=>setRouteCostVisibility(idx)} >
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                       <path fill-rule="evenodd" d="M7 6c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clip-rule="evenodd"/>
                                       <path fill-rule="evenodd" d="M2 11c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"/>
                                       <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
                                     </svg>
+                                    <!-- Create a modal -->
                                                                         
-                                  </Button>
-
-                                  <Button class="rounded-lg flex-justify-content bg-red-200 hover:bg-red-300" size="sm" on:click={()=>removeRoute(idx)}>
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-                                    </svg>
                                   </Button>
                                 </ButtonGroup>
                                 </p>
@@ -344,14 +409,18 @@
                       { /each }
       
                   </Timeline>
+                  <div class="w-96">
+                    <Button class="mx-96 bg-green-500 hover:bg-green-700 rounded-lg">Submit</Button>
+                  </div>
       
               </Card>
+              
       
           </div>
       
           <div class = "w-full mt-8 left-2/3 absolute h-fit">
       
-              <Card>
+              <Card style="background-color:#ffffee">
       
                   <h2 class = "font-bold text-left mb-8 font-serif" > Route-2 </h2>
       
@@ -382,6 +451,85 @@
       
           </div>
         <!-- </div> -->
-    </Card>
+    <!-- </Card> -->
  
 </div>
+
+<Modal bind:open={addRouteCost} size="xs" autoclose={false} class="w-full">
+    <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">{modalInfo.start} to {modalInfo.end}</h3>
+      {#each data.coaches as coach,idx}
+        <Label class="grid grid-cols-2 space-y-py">
+          <div class="flex-justify-content grid grid-cols-2">
+            <Badge rounded color="gray-200" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold w-fit bg-gray-300 border-black">
+
+              <span class="">{coach}</span>
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M4 5a2 2 0 0 0-2 2v2.5c0 .6.4 1 1 1a1.5 1.5 0 1 1 0 3 1 1 0 0 0-1 1V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2.5a1 1 0 0 0-1-1 1.5 1.5 0 1 1 0-3 1 1 0 0 0 1-1V7a2 2 0 0 0-2-2H4Z"/>
+              </svg>
+            </Badge>
+            <svg class="w-32 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M7 6c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M2 11c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"/>
+              <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+            </svg>
+          </div>
+          <Input id="cost" bind:value = {modalInfo.cost_class[idx]} type="number" name="cost" placeholder={modalInfo.cost_class[idx]}  required/>
+        </Label>
+      {/each}
+      <Button type="submit" class="w-full1 bg-gray-300" on:click={()=>setNewRouteCost(modalInfo.idx)}>Update info</Button>
+</Modal>
+
+
+<style>
+
+  #top-18 {
+
+    top: 18%
+
+  }
+
+  @media only screen and (max-width: 2048px){
+    #top-adjust-sidebar {
+
+      top: 42%;
+      position: fixed; 
+      
+
+    }
+
+  }
+
+  @media only screen and (max-width: 600px){
+    #top-adjust-sidebar {
+
+      top: 58%;
+      position: fixed; 
+
+    }
+
+  } 
+
+  
+   @media only screen and (max-width: 2048px){
+
+    #top-adjust-div {
+
+      top: 45%
+
+    }
+
+  } 
+
+  @media only screen and (max-width: 600px){
+    #top-adjust-div {
+
+      top: 60%
+
+    }
+
+  } 
+
+</style>
+
+
+<!-- add style for first card to cream -->

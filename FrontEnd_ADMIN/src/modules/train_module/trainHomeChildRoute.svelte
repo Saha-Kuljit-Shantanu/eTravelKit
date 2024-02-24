@@ -7,6 +7,8 @@
     import { Card, Select, TimelineItem, Timeline } from "flowbite-svelte"
 
     import { PlusOutline } from "flowbite-svelte-icons"
+    import { Footer, FooterLink, FooterLinkGroup, FooterCopyright } from "flowbite-svelte"
+
 
 
     // let train = []
@@ -63,7 +65,7 @@
 
     <div class = "w-full mt-8 left-1/4 absolute h-fit">
 
-        <Card >
+        <Card style="background-color:#ffffee">
 
         <h2 class = "font-bold text-left mb-8 font-serif" > Route-1 </h2>
 
@@ -83,7 +85,7 @@
                     <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> &nbsp; </p>
                     
                     
-                    <Select items= { stationList } id="text" placeholder = "add route" bind:value = { Route[idx] } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-1/2 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => addRoute(idx) } />
+                    <!-- <Select items= { stationList } id="text" placeholder = "add route" bind:value = { Route[idx] } class = " pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 w-1/2 rounded-lg hover:bg-green-200 cursor-pointer "  on:change = { () => addRoute(idx) } /> -->
 
                     
                     
@@ -98,7 +100,7 @@
 
     <div class = "w-full mt-8 left-2/3 absolute h-fit">
 
-        <Card>
+        <Card style="background-color:#ffffee">
 
             <h2 class = "font-bold text-left mb-8 font-serif" > Route-2 </h2>
 
