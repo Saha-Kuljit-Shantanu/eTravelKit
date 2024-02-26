@@ -38,21 +38,7 @@
       
     }
 
-    //let trains = []
-
-    // async function getTrains(){
-
-    //   const response = await fetch("/train/getAllTrainsByCompanyName/Agnibina Express")
-
-    //   trains = await response.json()
-
-    //   console.log(trains)
-
-    // }
-
-
-
-
+    let x = 'kuljit' ;
 </script>
 
   <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} class = "h-screen" >
@@ -87,7 +73,7 @@
           <svelte:fragment slot="icon">
             <ListOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
-          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-735" href = "{trainpath}/Agnibina-735/route" on:click = { () => storeTrain("Agnibina-735") } />
+          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="{x}" href = "{trainpath}/{x}/route" on:click = { () => storeTrain(x) } />
           <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-736" href = "{trainpath}/Agnibina-736/route" on:click = { () => storeTrain("Agnibina-736") } />
           <!-- <SidebarDropdownItem label="Invoice" /> -->
         </SidebarDropdownWrapper>

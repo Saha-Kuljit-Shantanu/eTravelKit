@@ -6,14 +6,14 @@
     import { seatType } from '../../data/train_details';
 
 
-    let coach = "AC_S", rows=6, columns = 5 ,compartments = 4;
+    let coach = "AC_S", rows=6, columns = 5 ,compartments = 1;
     let col = columns ;
     if(col%2 === 1){
       col = columns - 1;
     }
     let customized = 'pl-60'
     let added_coach = false ;
-    if(added_coach === false){
+    if(compartments !=1){
       customized = 'left-1/2'
     }
     let namesofCompartment = ['KA','KHA','GA','GHA','NGA','CHA','CHHA','JA','JHA','NYA','TA','THA','DA','DHA','NA','TA','THA','DA','DHA','NA','PA','PHA','BA','BHA','MA','YA','RA','LA','WA','SHA','SSA']
@@ -24,19 +24,15 @@
   <div class="container {customized}" id= "canvas">
     <div class = "w-1/4 items-center grid grid-cols-2 space-x-8">
 
-      <Select items= { seatType } id="text" bind:value = { coach } class = " mr-8 pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-gray-400 cursor-pointer "    />
+      <Select items= { seatType } id="text" bind:value = { coach } class = " mr-8 pl-8 font-bold font-serif bg-white border-4 border-gray-400 h-18 rounded-lg hover:bg-white cursor-pointer "    />
       <!-- <Select items= { seatType } id="text" bind:value = { coach } class = " mx-8 pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-gray-400 cursor-pointer "    /> -->
-      <card class="shadow-lg">
-        <p>Total Seats : {compartments} </p>
-        <p>compartments : {compartments}</p>
-      </card>
   
     </div>
     <div class="py-8">
     </div>
     <div class="container grid grid-cols-2 space-y-8 flex-justify-content">
       {#each Array(compartments) as _, compartment_index}
-        <Card class = "flex-justify-content space-y-8 shadow-lg" size = "md">
+        <Card class = "flex-justify-content space-y-8 shadow-lg" size = "md" style="background-color:#ffffee">
           <h1>{namesofCompartment[compartment_index]}</h1>
           {#each Array(rows) as _, rowIndex}
         
@@ -61,7 +57,7 @@
                 </div>
         
                 {:else}       -->
-                <div class="bg-gray-400 p-4 text-center text-gray-200 cursor-not-allowed rounded-lg">
+                <div class="bg-blue-900 p-4 text-center text-white cursor-not-allowed rounded-lg">
                     {String.fromCharCode(65 + colIndex)}{rowIndex + 1}
                 </div>
         

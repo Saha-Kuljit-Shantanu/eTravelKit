@@ -40,7 +40,7 @@
         <NavLi href = "{abspath}/coach" class = "text-lg cursor-pointer">Coach</NavLi>
         <NavLi href = "{abspath}/sched" class = "text-lg cursor-pointer">Schedule</NavLi>
         <NavLi href = "{abspath}/config" class = "text-lg cursor-pointer">Config</NavLi>
-        <NavLi href = "{abspath}/stats" class = "text-lg cursor-pointer">Stats</NavLi>
+        <!-- <NavLi href = "{abspath}/stats" class = "text-lg cursor-pointer">Stats</NavLi> -->
       </NavUl>
 
     {/if}
