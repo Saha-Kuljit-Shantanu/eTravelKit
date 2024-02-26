@@ -8,7 +8,7 @@
 
     import { PlusOutline } from "flowbite-svelte-icons"
     import { Footer, FooterLink, FooterLinkGroup, FooterCopyright } from "flowbite-svelte"
-
+    import {getRoutes} from '../../api/trainAdmin/trainGet'
 
 
     // let train = []
@@ -25,33 +25,27 @@
 
     //export let option = "route"
 
+    //get routes of a train
     onMount( async() => {
+        const response = await getRoutes(train) ;
+        if(!response.ok){
+            console.log("error") ;
+            return ;
+        }
+        if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+        }
+        let data = await response.json() ;
+        console.log(data) ;
+        console.log(train) ;
+        trainstationList = data.routes.map(f=>f.start) ;
 
-        console.log(train)
-    
+    }) ;
 
-    })
-
-    trainstationList = dummystationList
+    // trainstationList = dummystationList
 
     console.log(trainstationList) 
-
-
-
-    function addRoute(idx){
-
-       trainstationList.splice(idx+1,0,{ value : Route[idx] ,name : Route[idx] } )
-
-       console.log(idx,trainstationList)
-
-       trainstationList = trainstationList
-
-       return;
-
-       //Route = []
-       //window.location.reload()
-
-    }
     // function fade(
     //     node: Element,
     //     { delay, duration, easing }?: FadeParams | undefined
@@ -74,7 +68,7 @@
 
                 { #each trainstationList as stoppage,idx }
 
-                <TimelineItem title={ stoppage.name } date="">
+                <TimelineItem title={ stoppage } date="">
                     <svelte:fragment slot="icon">
                     <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
                     
@@ -109,7 +103,7 @@
 
                 { #each trainstationList.slice().reverse() as stoppage }
 
-                <TimelineItem title={ stoppage.name } date="">
+                <TimelineItem title={ stoppage} date="">
                     <svelte:fragment slot="icon">
                     <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
                     

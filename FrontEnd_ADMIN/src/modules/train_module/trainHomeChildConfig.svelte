@@ -1,36 +1,23 @@
 <script>
+	import { routes } from './../../routes.ts';
 
     import { NavLi, Select,NavUl, GradientButton, ButtonGroup,Navbar} from 'flowbite-svelte'
     import { Card } from 'flowbite-svelte'
     import { Badge } from 'flowbite-svelte'
     import { Button, Modal, Label, Input, Checkbox, Timeline } from 'flowbite-svelte';
     import { ClockSolid } from 'flowbite-svelte-icons';
-    import { seatType } from '../../data/train_details';
+    import { seatType, trainlines } from '../../data/train_details';
     import { add, compareAsc } from 'date-fns';
     import { dummystationList, stationList } from "../../data/train_details"
     import {TimelineItem} from 'flowbite-svelte'
     import {Footer, FooterLink, FooterLinkGroup, FooterCopyright} from 'flowbite-svelte'
+    import { onMount } from 'svelte';
+    import { getAllCoaches } from '../../api/trainAdmin/trainGet';
+    import { getRoutes } from '../../api/trainAdmin/trainGet';
+    import {addDetails} from '../../api/trainAdmin/trainPost'
+    import {addRoutes,deleteRoutes,updateRoutes} from '../../api/trainAdmin/trainPost'
 
-
-
-    // window.addEventListener('beforeunload', function(event) {
-    // // Cancel the event
-    //     event.preventDefault();
-    //     // Chrome requires returnValue to be set
-    //     event.returnValue = '';
-
-    //     // Display a confirmation dialog
-    //     const confirmationMessage = 'Are you sure you want to leave this page?';
-
-    //     event.returnValue = confirmationMessage; // For Chrome
-    //     return confirmationMessage; // For other browsers
-    // });
-    // window.onbeforeunload = function() {
-    //     return "Are you sure you want to leave?"; 
-    // };
-
-
-
+    let train = window.sessionStorage.getItem("selected") ;
 
     let newSeatType = [] ;
     let passwordGiven ;
@@ -47,35 +34,166 @@
     }
     let namesofCompartment = ['KA','KHA','GA','GHA','NGA','CHA','CHHA','JA','JHA','NYA','TA','THA','DA','DHA','NA','TA','THA','DA','DHA','NA','PA','PHA','BA','BHA','MA','YA','RA','LA','WA','SHA','SSA']
 
-
     let data = {
-        train_uid : "Agnibina-735",
-        coaches : ["SHOVAN","SHULAV","AC_S"] ,
-        dimensions: [[6,4,4],[6,5,4],[6,5,4]] ,
-        routes : [
-                    {
-                        "start": "Rajshahi",
-                        "departure_time": "10:00:00",
-                        "cost_class": [
-                        400,
-                        200,
-                        350,
-                        ]
-                    },
-                    {
-                        "start": "NarayanGanj",
-                        "departure_time": "11:00:00",
-                        "cost_class": [
-                        0,
-                        0,
-                        0,
-                        ]
-                    }
-                    ],
-        
-        
+      train_uid : train ,
+      coaches : [] ,
+      dimensions : [] ,
+      routes :[],
+      route_id : [] ,
+    } ;
+
+    //#####################//////
+    onMount( async() => {
+      let response = await getAllCoaches(train);
+      if(!response.ok){
+        console.log("error")
+        return
+      }
+      if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+      }
+      let res = await response.json();
+      //map data dimensions and coaches using map
+      
+      data.coaches = res.coaches ;
+      data.dimensions = res.dimensions ;
+
+      //getRoutes
+      let response2 = await getRoutes(train) ;
+      if(!response2.ok){
+          console.log("error") ;
+          return ;
+      }
+      if(response2.status != 200){
+          console.log("no routes found") ;
+          return ;
+      }
+      let res2 = await response2.json() ;
+      data.routes = res2.routes ;
+      data.route_id.push(res2.id) ;
+      trainstationList = data.routes.map(f=>f.start) ;
+      routeSize = trainstationList.length ;
+      trainstationList = ['',...trainstationList.slice()]
+      console.log(trainstationList)
+
+      remainingCoachInfo() ;
+
+      console.log("Mounted")
+      console.log(data)
+    }) ;
+
+    //POST req
+    async function updateCoachInfo() {
+      let newData = {
+        train_uid : train ,
+        coaches : data.coaches,
+        dimensions : data.dimensions,
+      }
+      let response = await addDetails(newData) ;
+      if(!response.ok){
+        console.log("error") ;
+        console.log(response.status) ;
+        return ;
+      }
+      if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+      }
+      console.log("Updating Coach Info")
+      console.log(data)
     }
+
+    //POST req
+    async function modifyRoute() {
+      let response ;
+      if(routeSize == 0 && data.routes.length ==0 ){
+        return ;
+      }
+      else if(routeSize == 0) {
+        let newData = {
+          train_uid : train ,
+          routes : data.routes
+        }
+        response = await addRoutes(newData) ;
+        if(!response.ok){
+          console.log("error") ;
+          console.log(response.status) ;
+          return ;
+        }
+        if(response.status != 200){
+              console.log("no routes found") ;
+              return ;
+        }
+        routeSize = data.routes.length ;
+      }
+
+      else if(data.routes.length == 0) {
+        response = await deleteRoutes(data.route_id[0]) ;
+        if(!response.ok){
+          console.log("error") ;
+          console.log(response.status) ;
+          return ;
+        }
+        if(response.status != 200){
+              console.log("no routes found") ;
+              return ;
+        }
+        routeSize = 0 ;
+      }
+
+      else {
+        let newData = {
+          id : data.route_id[0],
+          train_uid : train ,
+          routes : data.routes
+        }
+        response = await updateRoutes(newData) ;
+        if(!response.ok){
+          console.log("error") ;
+          console.log(response.status) ;
+          return ;
+        }
+        if(response.status != 200){
+              console.log("no routes found") ;
+              return ;
+        }
+        routeSize = data.routes.length ;
+      
+      }
+    }
+    //#######################/
+
+    // let data = {
+    //     train_uid : "Agnibina-735",
+    //     coaches : ["SHOVAN","SHULAV","AC_S"] ,
+    //     dimensions: [[6,4,4],[6,5,4],[6,5,4]] ,
+    //     routes : [
+    //                 {
+    //                     "start": "Rajshahi",
+    //                     "departure_time": "10:00:00",
+    //                     "cost_class": [
+    //                     400,
+    //                     200,
+    //                     350,
+    //                     ]
+    //                 },
+    //                 {
+    //                     "start": "NarayanGanj",
+    //                     "departure_time": "11:00:00",
+    //                     "cost_class": [
+    //                     0,
+    //                     0,
+    //                     0,
+    //                     ]
+    //                 }
+    //                 ],
+        
+        
+    // }
     let size = data.coaches.length ;
+
+    
 
     console.log(seatType)
 
@@ -91,7 +209,7 @@
 
     //adding comapartments
     let compartments_modal = false ;
-    function addComaprtments(coach_idx) {
+    async function addComaprtments(coach_idx) {
       console.log(passwordGiven) ;
         //make an authentication chechking 
         /**
@@ -101,6 +219,7 @@
         if(password.localeCompare(passwordGiven)===0){
           console.log("Adding Comaprtments",coach_idx)
           data.dimensions[coach_idx][0] = compartments ;
+          await updateCoachInfo() ;
           compartments_modal = false ;
           rows = columns = compartments = passwordGiven = coach = ""  ;
 
@@ -110,12 +229,13 @@
 
     //adding new coach
     let add_coach_modal = false ;
-    function addCoach() {
+    async function addCoach() {
         // event.preventDefault();
         if(password.localeCompare(passwordGiven)===0){
           console.log("Adding Coach")
           data.coaches.push(coach) ;
           data.dimensions.push([rows,columns,compartments]) ;
+          await updateCoachInfo() ;
           console.log(data.coaches) ;
           rows = columns = compartments = passwordGiven = coach = ""  ;
           add_coach_modal = false ;
@@ -126,12 +246,13 @@
 
     //deleting coach
     let delete_coach_modal = false ;
-    function deleteCoach(coach_idx) {
+    async function deleteCoach(coach_idx) {
       console.log
       if(password.localeCompare(passwordGiven)===0){
         console.log("Deleting Coach",coach_idx)
         data.coaches.splice(coach_idx,1) ;
         data.dimensions.splice(coach_idx,1) ;
+        await updateCoachInfo() ;
         delete_coach_modal = false ;
         rows = columns = compartments = passwordGiven = coach = ""  ;
         remainingCoachInfo() ;
@@ -171,6 +292,7 @@
     let Route = [], trainstationList = []
     let showList = stationList ;
     let addRouteCost = false ;
+    let routeSize = 0 ;
 
     //cost class info
     let cost_class = [] ;
@@ -180,10 +302,6 @@
 
     //export let option = "routes
 
-    trainstationList = data.routes.map(f=>f.start) ;
-    trainstationList = ['',...trainstationList.slice()]
-    console.log(trainstationList)
-
 
     function addRoute(idx){
       trainstationList.splice(idx+1,0,Route[idx])
@@ -192,7 +310,7 @@
         "departure_time": "00:00:00",
         "cost_class": [0,0,0]
       })
-
+      // await modifyRoute() ;
       console.log(data)
 
       trainstationList = trainstationList
@@ -209,7 +327,8 @@
       console.log(idx)
       //remove an elemnt by index
       trainstationList.splice(idx,1)
-      data.routes.splice(idx,1) 
+      data.routes.splice(idx-1,1) 
+      // await modifyRoute() ;
       trainstationList = trainstationList
       
       console.log(trainstationList)
@@ -249,6 +368,7 @@
     function setNewRouteCost(idx) {
       console.log(modalInfo)
       data.routes[modalInfo.idx].cost_class = modalInfo.cost_class ;
+      // await modifyRoute() ;
       addRouteCost = false ;
       console.log(data) ;
     }
@@ -410,7 +530,7 @@
       
                   </Timeline>
                   <div class="w-96">
-                    <Button class="mx-96 bg-green-500 hover:bg-green-700 rounded-lg">Submit</Button>
+                    <Button class="mx-96 bg-green-500 hover:bg-green-700 rounded-lg" on:click={()=>modifyRoute()}>Submit</Button>
                   </div>
       
               </Card>

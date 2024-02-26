@@ -11,6 +11,7 @@
   import { EnvelopeSolid, LockSolid } from 'flowbite-svelte-icons';
   import Homenavigation from '../../modules/train_module/navigation/homenavigation.svelte';
   import Homenavpopover from '../../modules/train_module/popovers/homenavpopover.svelte';
+  // export let trainList = []
 
   //import { storeusername } from '../store/store'////////////////
 
@@ -66,7 +67,7 @@
 
       window.sessionStorage.setItem( "username", username)
       
-     // console.log(data);
+     // console.log(data)
 
       push( `/home/${ username }`)
 

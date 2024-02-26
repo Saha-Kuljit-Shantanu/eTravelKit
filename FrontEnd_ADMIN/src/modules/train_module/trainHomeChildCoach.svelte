@@ -4,13 +4,69 @@
     import { Card } from 'flowbite-svelte'
 
     import { seatType } from '../../data/train_details';
+    import { onMount } from 'svelte';
+    import  {getAllCoaches} from '../../api/trainAdmin/trainGet'
+    import  {getCoachDetails} from '../../api/trainAdmin/trainGet'
+
+    let train = window.sessionStorage.getItem("selected")
+    let coach = "AC_S", rows= 0 , columns = 5 ,compartments = 0 ;
+
+    //get All coaches
+    ///############################//
+    let coaches = []
+    onMount( async() =>{
+      const response = await getAllCoaches(train);
+      if(!response.ok){
+        console.log("error")
+        return
+      }
+      if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+      }
+      let data = await response.json();
+      console.log(data)
+      rows = data.dimensions[0][2] ;
+      columns = data.dimensions[0][1] ;
+      compartments = data.dimensions[0][0] ;
+      coach = data.coaches[0] ;
+      //make a json object of name and value of coaches mapping to data.coaches
+      // compartments = data[0].compartments;
+      coaches = data.coaches.map(item => {
+          return { name: item, value: item };
+      });
+    }) ;
+
+    async function getCoachByName(coach){
+      const response = await getCoachDetails(train, coach);
+      if(!response.ok){
+        console.log("error")
+        return
+      }
+      if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+      }
+      let data = await response.json();
+      rows = data.dimensions[2] ;
+      columns = data.dimensions[1] ;
+      compartments = data.dimensions[0] ;
+      console.log('here') 
+
+    }
+    //#############################//
+    // load() ;
+    console.log(coach)
+    console.log(coaches) 
 
 
-    let coach = "AC_S", rows=6, columns = 5 ,compartments = 1;
+
+
     let col = columns ;
     if(col%2 === 1){
       col = columns - 1;
     }
+    console.log(col) 
     let customized = 'pl-60'
     let added_coach = false ;
     if(compartments !=1){
@@ -24,9 +80,10 @@
   <div class="container {customized}" id= "canvas">
     <div class = "w-1/4 items-center grid grid-cols-2 space-x-8">
 
-      <Select items= { seatType } id="text" bind:value = { coach } class = " mr-8 pl-8 font-bold font-serif bg-white border-4 border-gray-400 h-18 rounded-lg hover:bg-white cursor-pointer "    />
+      <Select items= { coaches } id="text" bind:value = { coach } class = " mr-8 pl-8 font-bold font-serif bg-white border-4 border-gray-400 h-18 rounded-lg hover:bg-white cursor-pointer " on:change={()=>getCoachByName(coach)}    />
       <!-- <Select items= { seatType } id="text" bind:value = { coach } class = " mx-8 pl-8 font-bold font-serif bg-gray-100 border-4 border-gray-400 h-18 rounded-lg hover:bg-gray-400 cursor-pointer "    /> -->
-  
+      <h1 class = "font-bold text-center " > { train } </h1>
+
     </div>
     <div class="py-8">
     </div>

@@ -5,6 +5,10 @@
     import '@fortawesome/fontawesome-free/css/all.min.css';
     import '@fortawesome/fontawesome-free/css/all.css';
     import { push } from 'svelte-spa-router';
+    import { onMount } from 'svelte';
+    
+    // import trainAdminAPi from api folder
+    import  {getAlltrains} from '../../api/trainAdmin/trainGet'
     //import { writable } from 'svelte/store';
     //import { storeusername } from '../../store/store'/////////////////////
     
@@ -38,7 +42,25 @@
       
     }
 
-    let x = 'kuljit' ;
+    let trainList = [] ;
+    onMount( async() => {
+      console.log(username)
+      let response = await getAlltrains(username);
+      if(!response.ok){
+        console.log("error")
+        return
+      }
+      if(response.status != 200){
+            console.log("no routes found") ;
+            return ;
+        }
+      // trainList = response.map( train => train.train_uid)
+      trainList = await response.json()
+      trainList = trainList.map( train => train.train_uid)
+      console.log(trainList)
+      
+
+    })
 </script>
 
   <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} class = "h-screen" >
@@ -73,9 +95,11 @@
           <svelte:fragment slot="icon">
             <ListOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
-          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="{x}" href = "{trainpath}/{x}/route" on:click = { () => storeTrain(x) } />
-          <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="agnibina-736" href = "{trainpath}/Agnibina-736/route" on:click = { () => storeTrain("Agnibina-736") } />
-          <!-- <SidebarDropdownItem label="Invoice" /> -->
+          {#each trainList as train_uid,idx}
+            <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="{train_uid}" href = "{trainpath}/{train_uid}/route" on:click = { () => storeTrain(train_uid) } />
+            <!-- <SidebarDropdownItem  class = "flex items-center p-2 text-base font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" label="{train_uid}" href = "{trainpath}/{train_uid}/route" on:click = { () => storeTrain(train_uid) } /> -->
+            <!-- <SidebarDropdownItem label="Invoice" /> -->
+          {/each}
         </SidebarDropdownWrapper>
       
 
