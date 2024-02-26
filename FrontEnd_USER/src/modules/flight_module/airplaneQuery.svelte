@@ -212,10 +212,10 @@
 
       }
 
-      //else {
+      else {
 
         push(`/airplane/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${air_line.flight_id}`)
-      //}
+      }
 
       storeSelectedAirline.set(air_line)
 
