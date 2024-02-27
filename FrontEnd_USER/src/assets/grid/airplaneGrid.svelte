@@ -22,7 +22,7 @@
 
     import { Modal } from 'flowbite-svelte'
 
-    import { storeAirplaneSelectedSeat } from "../../store/store"
+    import { storeAirplaneSelectedSeat, storeSelectedAirline } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
@@ -72,7 +72,7 @@
 
       console.log(status)
 
-      //storeAirGrid.set(grid)
+      // storeSelectedAirline.set(grid)
 
     }
 

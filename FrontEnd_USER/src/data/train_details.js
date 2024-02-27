@@ -2,9 +2,9 @@ export const stationList = [
 
     { value: "Akkelpur" , name: "Akkelpur", },
     { value: "Barisal" , name: "Barisal", },
+    { value: "Chittagong" , name: "Chittagong", },
     { value: "Comilla" , name: "Comilla", },
     { value: "Cox's-Bazar" , name: "Cox's Bazar", },
-    { value: "Chittagong" , name: "Chittagong", },
     { value: "Dhaka" , name: "Dhaka", },
     { value: "Dinajpur" , name: "Dinajpur", },
     { value: "Faridpur" , name: "Faridpur", },

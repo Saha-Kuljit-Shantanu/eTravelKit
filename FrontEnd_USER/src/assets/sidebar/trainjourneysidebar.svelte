@@ -75,10 +75,56 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
     </SidebarGroup>
 
     <SidebarGroup border class = "border-black">
+
+      
+
+      <SidebarItem label= { window.sessionStorage.getItem('storeTrain') } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+        <svelte:fragment slot="icon">
+            
+        <i class="fa-solid fa-md fa-train mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Start : </p>
+        
+
+        </svelte:fragment> 
+          
+      </SidebarItem>
+
+      
+
+
+      <SidebarItem label= { window.sessionStorage.getItem('storeDepartureTime') } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+        <svelte:fragment slot="icon">
+            
+        <i class="fa-solid fa-md fa-train-tram mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Stoppage : </p>
+        
+
+        </svelte:fragment> 
+          
+      </SidebarItem>
+      
+      <SidebarItem label= { window.sessionStorage.getItem('storeArrivalTime') } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+        <svelte:fragment slot="icon">
+            
+        <i class="fa-solid fa-md fa-train-subway mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Coach : </p>
+        
+
+        </svelte:fragment> 
+          
+      </SidebarItem>
+      
+
+    </SidebarGroup>
+
+    <SidebarGroup border class = "border-black">
       <SidebarItem label= { lastSixValues[0] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-arrival mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-train-tram mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
         <p class="font-normal text-gray-800 text-sm md:text-lg"> Start : </p>
         
@@ -93,7 +139,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
       <SidebarItem label= { lastSixValues[1] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-departure mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-train-subway mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
         <p class="font-normal text-gray-800 text-sm md:text-lg"> Stoppage : </p>
         
@@ -105,7 +151,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
       <SidebarItem label= { lastSixValues[3] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-circle-xmark mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-truck-fast mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
         <p class="font-normal text-gray-800 text-sm md:text-lg"> Coach : </p>
         
@@ -128,39 +174,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
 
 
   </SidebarGroup>
-  <SidebarGroup border>
-
-      <!-- <SidebarItem label="Time Range: {timeRange[0]} - {timeRange[1]} hours" for="time-slider" class = "text-gray-400 hover:bg-gray-800" on:click =  {handleClick}> -->
-
-       
-      <!-- </SidebarItem> -->
-
-
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick} >
-        <svelte:fragment slot="icon">
-
-        <!-- <input type="range" id="time-slider" class = "w-full" min={timeRange[0]} max={up} step="1" bind:value={timeRange[1]} /> -->
-
-        </svelte:fragment>
-      </SidebarItem>
-
-
-      <SidebarItem label="" class = "hover:bg-gray-800" on:click =  {handleClick} >
-
-        <svelte:fragment slot="icon"  >
-
-            
-          <!-- <Button color="blue" class = "w-full" on:click = {() => filterTime()} > search </Button> -->
-
-        </svelte:fragment>
-        
-      </SidebarItem>
-
-
-      
-      
-
-  </SidebarGroup>
+  
   
   </SidebarWrapper>
 </Sidebar>

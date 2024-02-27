@@ -4,7 +4,7 @@
   // import { GridSolid, TicketOutline, DollarOutline , ArrowRightFromBracketSolid, QuestionCircleOutline } from 'flowbite-svelte-icons';
   import '@fortawesome/fontawesome-free/css/all.min.css';
   import '@fortawesome/fontawesome-free/css/all.css';
-    import { storeFlightTotalCost, storeSelectedAirline } from '../../store/store';
+  import { storeBusTotalCost, storeBusBoardTime, storeBusDropTime } from '../../store/store';
   //import { writable } from 'svelte/store';
   //import { storeusername } from '../../store/store'/////////////////////
   
@@ -27,7 +27,7 @@
 
 
 
-let lastSixValues = []
+let lastFourValues = []
 
 // const url = new URL(window.location.href)
 
@@ -49,12 +49,16 @@ function handleClick(event) {
 
 let url = new URL(window.location.href)
 
-let total = 0, airline;
+let total = 0, board_time, drop_time
 
-lastSixValues = url.hash.split('/').filter(Boolean).slice(-6)
+lastFourValues = url.hash.split('/').filter(Boolean).slice(-4)
 
-storeFlightTotalCost.subscribe( tot => { total = tot })
-storeSelectedAirline.subscribe(airLine => {airline = airLine})
+storeBusTotalCost.subscribe( tot => { total = tot })
+
+storeBusBoardTime.subscribe( time => { board_time = time })
+
+storeBusDropTime.subscribe( time => { drop_time = time })
+
 
 
 </script>
@@ -63,8 +67,6 @@ storeSelectedAirline.subscribe(airLine => {airline = airLine})
 
 <Sidebar class = "w-full" >
   <SidebarWrapper class = "bg-gray-200 h-1/2 w-fit rounded-xl mt-4 cursor-default" >
-
-    
     <SidebarGroup class = "cursor-default">
 
       <SidebarItem label= "Journey Details" class = "text-gray-800 hover:bg-gray-200 font-bold text-sm md:text-2xl cursor-default font-serif" on:click =  { handleClick } >
@@ -78,74 +80,72 @@ storeSelectedAirline.subscribe(airLine => {airline = airLine})
 
     <SidebarGroup border class = "border-black">
 
-      <!-- <SidebarItem label="Time Range: {timeRange[0]} - {timeRange[1]} hours" for="time-slider" class = "text-gray-400 hover:bg-gray-800" on:click =  {handleClick}> -->
-
-       
-      <!-- </SidebarItem> -->
-
-
-      <SidebarItem label={ window.sessionStorage.getItem("storeAirline") } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default " on:click =  { handleClick } >
-        <svelte:fragment slot="icon">
-
-        <i class="fa-solid fa-md fa-plane-up mr-2 font-normal text-gray-800" > </i>
-          <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-          <p class="font-normal text-gray-800 text-sm md:text-lg"> Airlines : </p>
-        </svelte:fragment>
-      </SidebarItem>
-
-
-      <SidebarItem label= { window.sessionStorage.getItem("storeFlight") } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default " on:click =  { handleClick } >
-
+      
+        
+      <SidebarItem label= { window.sessionStorage.getItem('storeBusCompany') } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-          <i class="fa-solid fa-md fa-plane-circle-check mr-2 font-normal text-gray-800" > </i>
-          <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-          <p class="font-normal text-gray-800 text-sm md:text-lg"> Flight : </p>
+        <i class="fa-solid fa-md fa-bus mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Bus : </p>
         
 
         </svelte:fragment> 
-        
+          
       </SidebarItem>
 
-      <SidebarItem label= { window.sessionStorage.getItem("storeDepartureTime") } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default " on:click =  { handleClick } >
+      
 
+
+      <SidebarItem label= { window.sessionStorage.getItem('storeSelectedBusName') } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-          <i class="fa-solid fa-md fa-plane-departure mr-2 font-normal text-gray-800" > </i>
-          <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-          <p class="font-normal text-gray-800 text-sm md:text-lg"> Boarding : </p>
+        <i class="fa-solid fa-md fa-bus mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Coach : </p>
         
 
         </svelte:fragment> 
-        
+          
       </SidebarItem>
-
-      <SidebarItem label= { window.sessionStorage.getItem("storeArrivalTime") } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default " on:click =  { handleClick } >
-
+      
+      <SidebarItem label= {board_time} class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-          <i class="fa-solid fa-md fa-plane-arrival mr-2 font-normal text-gray-800" > </i>
-          <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-          <p class="font-normal text-gray-800 text-sm md:text-lg"> Landing : </p>
+        <i class="fa-solid fa-md fa-clock mr-2 font-normal text-gray-800" > </i>
+        <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Departure Time : </p>
         
 
         </svelte:fragment> 
+          
+      </SidebarItem>
+
+      <SidebarItem label= {drop_time} class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+        <svelte:fragment slot="icon">
+            
         
+          <i class="fa-solid fa-md fa-clock mr-3 font-normal text-gray-800" > </i>
+          <p class="font-normal text-gray-800 text-sm md:text-lg"> Arrival Time : </p>
+        
+
+        </svelte:fragment> 
+          
       </SidebarItem>
 
 
       
       
 
-    </SidebarGroup>
+  </SidebarGroup>
 
     <SidebarGroup border class = "border-black">
-      <SidebarItem label= { lastSixValues[0] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+      <SidebarItem label= { lastFourValues[0] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-arrival mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-bus-simple mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Source Airport : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Start : </p>
         
 
         </svelte:fragment> 
@@ -155,24 +155,24 @@ storeSelectedAirline.subscribe(airLine => {airline = airLine})
       
 
 
-      <SidebarItem label= { lastSixValues[1] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+      <SidebarItem label= { lastFourValues[1] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-departure mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-bus-simple mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Destination Airport : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Stoppage : </p>
         
 
         </svelte:fragment> 
           
       </SidebarItem>
       
-      <SidebarItem label= { lastSixValues[3] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
+      <SidebarItem label= { lastFourValues[3] } class = "text-blue-400 hover:bg-gray-200 font-bold text-sm md:text-xl cursor-default" on:click =  { handleClick } >
         <svelte:fragment slot="icon">
             
-        <i class="fa-solid fa-md fa-plane-circle-xmark mr-2 font-normal text-gray-800" > </i>
+        <i class="fa-solid fa-md fa-lira-sign mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Seat Class : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Category : </p>
         
 
         </svelte:fragment> 

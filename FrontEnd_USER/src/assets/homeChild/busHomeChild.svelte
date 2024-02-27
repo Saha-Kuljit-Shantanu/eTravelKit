@@ -2,10 +2,10 @@
 
 
 
-import Endpoints from "../../Content/trainStationContent/stationEndpoints.svelte"
-import Othertrainparams from "../../Content/trainStationContent/othertrainparams.svelte";
+import Endpoints from "../../Content/busStandContent/standEndpoints.svelte"
+import Otherbusparams from "../../Content/busStandContent/otherbusparams.svelte";
 
-import { storeSource, storeDest, storeSeatNumber, storeJourneyDate, storeTrainCoach } from "../../store/store"
+import { storeSource, storeDest, storeBusCategory, storeJourneyDate } from "../../store/store"
 
 
 import { push } from 'svelte-spa-router'
@@ -14,23 +14,21 @@ import { push } from 'svelte-spa-router'
 import { Button } from 'flowbite-svelte'
 
 
-let  source, dest, seat_number, seat_class, selectedDate
+let  source, dest, category, selectedDate
 
 
 
-async function train_query(){
+async function bus_query(){
 
   storeSource.subscribe( val => { source = val } )
 
   storeDest.subscribe( val => { dest = val } )
 
-  storeSeatNumber.subscribe( val => { seat_number = val} )
-
-  storeTrainCoach.subscribe( val => { seat_class = val } )
+  storeBusCategory.subscribe( val => { category = val } )
 
   storeJourneyDate.subscribe( val => { selectedDate = val } )
 
-  push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`)
+  push(`/bus/${source}/${dest}/${category}/${selectedDate}`)
 
 }
 
@@ -41,7 +39,7 @@ function validateInputs() {
     
       if (form.reportValidity()) {
       
-        train_query();
+        bus_query();
 
       }
 }
@@ -83,7 +81,7 @@ function validateInputs() {
 
       <div class="container w-1/2 top-84 md:top-72 absolute">
 
-        <Othertrainparams defaultDate = { new Date() }  placeholder_status = "true" />
+        <Otherbusparams defaultDate = { new Date() }  placeholder_status = "true" />
 
       </div>
 

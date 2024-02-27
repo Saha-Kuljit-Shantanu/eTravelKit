@@ -92,7 +92,7 @@
         </SidebarItem>
 
 
-        <SidebarItem label="Bus" >
+        <SidebarItem label="Bus" href="/#/bus" >
             <svelte:fragment slot="icon">
 
              <i class="fa-solid fa-bus"></i>

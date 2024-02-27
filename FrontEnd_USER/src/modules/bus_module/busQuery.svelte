@@ -3,15 +3,15 @@
     import Homenavigation from "../../assets/navigation/homenavigation.svelte";
 
 
-    import Endpoints from "../../Content/trainStationContent/stationEndpoints.svelte";
+    import Endpoints from "../../Content/busStandContent/standEndpoints.svelte";
 
-    import Othertrainparams from "../../Content/trainStationContent/othertrainparams.svelte";
+    import Otherbusparams from "../../Content/busStandContent/otherbusparams.svelte";
 
-    import Sortsidebar from "../../assets/sidebar/trainsortsidebar.svelte";
+    //import Sortsidebar from "../../assets/sidebar/trainsortsidebar.svelte";
 
-    import { getTrainRoute } from "../../api/trainRoute";
+    //import { getTrainRoute } from "../../api/trainRoute";
 
-    import { Alert, Avatar, Badge, Button, ButtonGroup, Modal, Timeline, TimelineItem } from "flowbite-svelte";
+    import { Alert, Avatar, Badge, Button, ButtonGroup, Checkbox, Modal, Timeline, TimelineItem } from "flowbite-svelte";
 
     import { AdjustmentsVerticalOutline, DollarSolid, CalendarWeekSolid, DotsVerticalOutline, LetterBoldOutline } from "flowbite-svelte-icons";
 
@@ -24,7 +24,11 @@
     //for query in backend
     let query = '' ;
 
-    let lastFiveValues = []
+    let companyfilterlist = [];
+
+    let companyfulllist = []
+
+    let lastFourValues = []
 
     const url = new URL(window.location.href)
 
@@ -32,35 +36,37 @@
 
     console.log(pathsegments)
 
-    lastFiveValues = pathsegments.slice(-5)
+    lastFourValues = pathsegments.slice(-4)
 
-    console.log(lastFiveValues)
+    console.log(lastFourValues)
 
     let openModal = false, size = 'xs', color = 'blue'
 
     let openRouteViewModal = false, openLoginAlertModal = false, modalRoute =  { } 
 
+    let doFilter = false
+
     
 
 
-    console.log( url, url.pathname, pathsegments, lastFiveValues )
+    console.log( url, url.pathname, pathsegments, lastFourValues )
 
     import { Card } from 'flowbite-svelte';
     import { onMount } from "svelte";
     
-    import { storeAirline, storeTrainFilterStatus, storeTrainQuery, storeSelectedTrain } from "../../store/store"
+    import { storeBus, storeBusCategory, storeBusFilterStatus, storeBusQuery, storeSelectedBus } from "../../store/store"
 
     import { push } from 'svelte-spa-router'
 
-    import { trainSearch } from "../../api/trainSearch";
+    import { busSearch } from "../../api/busSearch";
 
-    let train_list = [], status = 0
+    let bus_list = [], status = 0
 
     //storeAirline.subscribe( line => { air_line = line } )
 
-    storeTrainFilterStatus.subscribe( st => { status = st } )
+    storeBusFilterStatus.subscribe( st => { status = st } )
 
-    storeTrainQuery.subscribe( q => { query = q } )
+    storeBusQuery.subscribe( q => { query = q } )
 
     function reformatDate(datedmy){
 
@@ -84,18 +90,35 @@
 
     }
 
+    async function callFilterApi(){
+
+      let selected_route_companies = {
+
+        "selected_route_companies" : companyfilterlist
+
+      }
+
+      const formData = JSON.stringify(selected_route_companies)
+
+      const response = await busSearch(lastFourValues,query,formData)
+
+      return response
+    }
+
     async function todo(){
 
 
       status = 0
 
+      let data
+
       //lastFiveValues[4] = "2024-1-29"
 
-      let x = lastFiveValues[4]
+      let x = lastFourValues[3]
 
-      lastFiveValues[4] = reformatDate(lastFiveValues[4])
+      lastFourValues[3] = reformatDate(lastFourValues[3])
 
-      const response = await trainSearch(lastFiveValues,query)
+      const response = await callFilterApi()
       
       if (!response.ok) {
 
@@ -103,10 +126,13 @@
 
       }
 
-      else train_list = await response.json();
+      else data = await response.json();
 
-      lastFiveValues[4] = x
-    console.log(train_list);
+      bus_list = data.buslist
+      companyfulllist = data.route_companies
+
+      lastFourValues[3] = x
+    console.log(bus_list,companyfulllist);
 
     console.log(status)
 
@@ -144,8 +170,8 @@
 
    
 
-    async function Quickest(){
-      query = 'q=quickest&'
+    async function avail(){
+      query = 'q=seats_available&'
       todo()
 
     }
@@ -157,21 +183,63 @@
     }
 
     async function Earliest(){
-      query = 'q=early_takeoff&'
+      query = 'q=early_departure&'
       todo()
 
     }
 
-    async function unsort(){
-      query = ''
-      todo()
+    async function filter(){
+      if(doFilter == false) doFilter = true;
+
+      else if(doFilter == true) {
+
+        doFilter = false
+        companyfilterlist = []
+        todo()
+
+      }
+
+      
 
     }
 
-    import { storeSource, storeDest, storeSeatNumber, storeTrainCoach, storeJourneyDate } from "../../store/store"
+    function isCompanyInList(company, list) {
+
+      return list.some(item => item === company);
+
+    }
+
+    function removeCompanyFromList(company, list) {
+
+      return list.filter(item => !(item === company ));
+
+    }
+
+    async function filterByCompany(company){
+
+      if(isCompanyInList(company, companyfilterlist) == true){
+
+        companyfilterlist = removeCompanyFromList(company, companyfilterlist)
+
+      }
+
+      else{
+
+        companyfilterlist = [...companyfilterlist, company]
+
+      }
+
+      console.log(companyfilterlist)
+
+      todo()
+
+
+    }
+
+    import { storeSource, storeDest, storeJourneyDate } from "../../store/store"
     //import { routes } from "../../routes";
 
-    let source =  lastFiveValues[0], dest = lastFiveValues[1], seat_number= parseInt(lastFiveValues[2],10), seat_class= lastFiveValues[3], selectedDate= lastFiveValues[4]
+    let source =  lastFourValues[0], dest = lastFourValues[1] , category= lastFourValues[2], selectedDate= lastFourValues[3]
 
 
     async function search(){
@@ -181,15 +249,13 @@
 
       storeDest.subscribe( val => { if(val != "Not yet" ) dest = val } )
 
-      storeSeatNumber.subscribe( val => { if(val != 0 ) seat_number = val} )
-
-      storeTrainCoach.subscribe( val => { if(val != "Not yet" ) seat_class = val } )
+      storeBusCategory.subscribe( val => { if(val != "Not yet" ) category = val } )
 
       storeJourneyDate.subscribe( val => { selectedDate = val } )
 
-      lastFiveValues = [ source, dest, seat_number,seat_class,selectedDate ]
+      lastFourValues = [ source, dest, category, selectedDate ]
 
-      window.location.href = `#/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}`
+      window.location.href = `#/bus/${source}/${dest}/${category}/${selectedDate}`
 
       
 
@@ -199,7 +265,7 @@
       
     }
 
-    async function showGrid(train){
+    async function showGrid(bus){
 
       // /seat_details/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}
 
@@ -214,17 +280,17 @@
 
       //else {
 
-        push(`/train/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${train.train_uid}`)
+        push(`/bus/seat/${source}/${dest}/${category}/${selectedDate}`)
       //}
 
-      storeSelectedTrain.set(train)
+      storeSelectedBus.set(bus)
 
-      console.log(train)
+      window.sessionStorage.setItem('storeSelectedBusName', bus.bus_name)
+      window.sessionStorage.setItem("storeBusCompany",bus.bus_company)
+      window.sessionStorage.setItem("storeDepartureTime",bus.departure_time)
+      window.sessionStorage.setItem("storeArrivalTime",bus.arrival_time)
 
-      // window.sessionStorage.setItem("storeTrainCompany",train.air_company_name)
-      window.sessionStorage.setItem("storeTrain",train.train_uid)
-      window.sessionStorage.setItem("storeDepartureTime",train.routes[0].departure_time)
-      window.sessionStorage.setItem("storeArrivalTime",train.routes[train.routes.length -1 ].departure_time)
+      console.log(bus)
 
       
 
@@ -235,27 +301,27 @@
 
     }
 
-    async function showModal(station){
+    async function showModal(bus){
 
       if(openLoginAlertModal == false){
 
-        let jsonData = {
-//mail,pass,phone,nid
+//         let jsonData = {
+// //mail,pass,phone,nid
         
-          "train_uid" : station.train_uid,
-          "schedule_id" : station.schedule_id,
+//           "bus_name" : bus.bus_name,
+//           "schedule_id" : bus.schedule_id,
           
         
     
-        };
+//         };
 
-        const formData = JSON.stringify(jsonData);
+//         const formData = JSON.stringify(jsonData);
 
-        const response = await getTrainRoute( formData );
+        //const response = await getTrainRoute( formData );
 
-        modalRoute = await response.json()
+        //modalRoute = await response.json()
 
-        modalRoute = modalRoute[0]
+        modalRoute = bus
 
         console.log(modalRoute)
 
@@ -330,7 +396,7 @@
             
                   <div class="container w-1/2 top-20 left-1/4 absolute">
             
-                    <Othertrainparams defaultDate = { lastFiveValues[4] } placeholder_status = "false"/>
+                    <Otherbusparams defaultDate = { lastFourValues[3] } placeholder_status = "false"/>
             
                   </div>
             
@@ -375,10 +441,10 @@
           <div class="max-w-2xl w-fit " >
 
           <ButtonGroup >
-            <Button outline color="dark" class= " rounded-l-md rounded-r-none" on:click = { () => Quickest()}>
+            <Button outline color="dark" class= " rounded-l-md rounded-r-none" on:click = { () => avail()}>
               
               <AdjustmentsVerticalOutline class="w-3 h-3 me-2" />
-              Sort by quickest flight
+              Sort by available seats
             </Button>
             <Button outline color="dark" class= "  rounded-none" on:click = { () => Cheapest()}>
               <DollarSolid class="w-3 h-3 me-2" />
@@ -386,15 +452,17 @@
             </Button>
             <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
               <i class="fa-solid fa-plane-departure me-2"></i>
-              Sort by earliest takeoff
+              Sort by earliest departure
             </Button>
-            <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => unsort()}>
+            <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => filter()}>
               <!-- <i class="fa-solid fa-plane-departure"></i> -->
-              Unsort
+              Filter
             </Button>
           </ButtonGroup>
 
           </div>
+
+          
 
           {#if status === 404} 
 
@@ -402,37 +470,59 @@
 
             <Alert>
               <span class="font-medium">OOPS!</span>
-              No available trains yet 
+              No available buses yet 
             </Alert>
 
           </div>
 
           {:else}
 
+          {#if doFilter == true}
 
-          {#each train_list as trainline}
+            <Card size = "xl" class = "bg-gray-200 w-fit relative ">
+
+              <div class="grid grid-cols-4 gap-20">
+
+                {#each companyfulllist as _}
+
+                  <Checkbox class= "cursor-pointer" color="green" on:click = { () => filterByCompany(_)}>{_}</Checkbox>
+
+                {/each}
+              </div>
+
+            
+            </Card>
+
+          {/if}
+
+
+          {#each bus_list as bus}
   
           
           <!-- -->
           <div class="max-w-2xl" >
 
+
+            
+
             
 
             
 
-            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" on:click = { () => showModal(trainline)}>
+            <Card horizontal size = "xl" class = "bg-gray-200 w-fit relative cursor-pointer" padding = "md" on:click = { () => showModal(bus)}>
 
-              <div class = " border-r border-gray-400 justify-center w-28 relative my-2">
-                <Avatar size="md" src = { trainline.logo } class = "ml-8"/>
-                <Badge color="yellow" class="mt-4 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.train_uid }</Badge>
+              <div class = " border-r border-gray-400 justify-center w-48 relative my-2">
+                <Avatar size="md" src = { bus.logo } class = "ml-16"/>
+                <Badge color="yellow" class="mt-4 text-sm w-40 tracking-tight text-gray-900 dark:text-white relative">{ bus.bus_name }</Badge>
+                <p class="ml-8 mt-4 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ bus.bus_company }</p>
               </div>
 
              
 
-              <div class = "justify-center w-24 relative my-auto">
-                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.routes[0].start }</p>
-                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.routes[0].departure_time  }</Badge>
-                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.departure_date).toLocaleDateString() }</p>
+              <div class = "justify-center w-28 relative my-auto">
+                <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ bus.start }</p>
+                <Badge color="red" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ bus.departure_time  }</Badge>
+                <!-- <p class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.departure_date).toLocaleDateString() }</p> -->
               </div>
 
               <div class = "my-auto relative w-96 " >
@@ -489,24 +579,26 @@
               </div>
               
 
-              <div class = " justify-center w-24 relative my-auto ">
-                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ trainline.routes[trainline.routes.length-1].start }</p>
-                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ trainline.routes[trainline.routes.length-1].departure_time }</Badge>
-                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.arrival_date).toLocaleDateString() }</p>
+              <div class = " justify-center w-28 relative my-auto ">
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative">{ bus.stop }</p>
+                <Badge color="green" class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold ">{ bus.arrival_time }</Badge>
+                <!-- <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ new Date(trainline.arrival_date).toLocaleDateString() }</p> -->
               </div>
 
             
 
-              <div class = " justify-center w-24 relative my-auto">
+              <div class = " justify-center w-28 relative my-auto ml-2">
+
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">Seats Available </p>
                 
-                <p class="mt-1/2 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ trainline.duration_hour } h { trainline.duration_minutes} m</p>
+                <p class="mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold">{ bus.availableSeats } </p>
               </div>
 
-              <div class = " border-l border-gray-800 justify-center w-28 relative my-2">
+              <div class = " border-l border-gray-800 justify-center w-28 relative my-auto">
                 
-                <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { trainline.cost_class }</Badge>
+                <Badge color="yellow" class="mt-1/2 text-md w-24 tracking-tight text-gray-900 dark:text-white relative mb-4">Tk : { bus.cost }</Badge>
 
-                <Button shadow color="dark" on:click = { () => showGrid(trainline)}> Book </Button> 
+                <Button shadow color="dark" on:click = { () => showGrid(bus)}> Book </Button> 
              
               </div>
 
@@ -568,9 +660,11 @@
 
 <!-- <FlightTansitModal openModal = { openTransitViewModal } modalAirLine = { modalAirLine }/> -->
 
-<Modal title= { modalRoute.train_uid } bind:open={ openRouteViewModal } { size } { color } autoclose>
+<Modal title= { modalRoute.bus_name } bind:open={ openRouteViewModal } { size } { color } autoclose>
+
+  <p class = "font-bold text-left"> Boarding points :</p>
   <Timeline order="vertical" class = "border-rose-600 font-bold">
-    <TimelineItem title={ modalRoute.routes[0].start } date={ reformatDatedmony( new Date(  modalRoute.routes[0].date ).toLocaleDateString() ) }>
+    <!-- <TimelineItem title={ modalRoute.routes[0].start } date={ reformatDatedmony( new Date(  modalRoute.routes[0].date ).toLocaleDateString() ) }>
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
           
@@ -578,18 +672,20 @@
 
         </span>
       </svelte:fragment>
-      <p class=" text-base font-bold text-gray-500 dark:text-gray-400">{ modalRoute.routes[0].departure_time }</p>
+      <p class=" text-base font-bold text-gray-500 dark:text-gray-400">{ modalRoute.routes[0].departure_time }</p> -->
       <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400">{ modalRoute.flight_id }</p> -->
       
-    </TimelineItem>
+    <!-- </TimelineItem> -->
 
-    { #if modalRoute.routes.length != 0 }
+    <!-- { #if modalRoute.routes.length != 0 } -->
 
-      { #each modalRoute.routes as route,index }
+      { #each modalRoute.boarding as boarding }
 
-        {#if index != 0 && index != modalRoute.routes.length-1 }
+        <!-- {#if index != 0 && index != modalRoute.routes.length-1 } -->
 
-          <TimelineItem title={ route.start } date={ reformatDatedmony( new Date(route.date).toLocaleDateString() ) }>
+        <!-- date={ reformatDatedmony( new Date(modalRoute.departure_date).toLocaleDateString() ) } -->
+
+          <TimelineItem title={ boarding.checkpoint } >
             <svelte:fragment slot="icon">
               <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
             
@@ -597,19 +693,19 @@
 
               </span>
             </svelte:fragment>
-            <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { route.departure_time } </p>
+            <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { boarding.counter } </p>
             <!-- <p class=" text-base font-bold font-serif text-gray-500 dark:text-gray-400"> { transit.flight_id } </p> -->
             
           </TimelineItem>
 
-        {/if }
+        <!-- {/if } -->
 
       { /each }
 
-    {/if}
+    <!-- {/if} -->
     
 
-    <TimelineItem title={ modalRoute.routes[modalRoute.routes.length-1].start } date={ reformatDatedmony( new Date(modalRoute.routes[modalRoute.routes.length-1].date).toLocaleDateString() ) }>
+    <!-- <TimelineItem title={ modalRoute.routes[modalRoute.routes.length-1].start } date={ reformatDatedmony( new Date(modalRoute.routes[modalRoute.routes.length-1].date).toLocaleDateString() ) }>
       <svelte:fragment slot="icon">
         <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
         
@@ -618,9 +714,45 @@
         </span>
       </svelte:fragment>
       <p class="text-base font-bond text-gray-500 dark:text-gray-400"> { modalRoute.routes[modalRoute.routes.length-1].departure_time } </p>
-    </TimelineItem>
+    </TimelineItem> -->
 
   </Timeline>
+
+  
+
+  
+
+  <p class = "font-bold text-left"> Dropping points :</p>
+
+  
+
+
+  
+  <Timeline order="vertical" class = "border-rose-600 font-bold">
+    
+
+      { #each modalRoute.dropping as dropping }
+
+        
+          <TimelineItem title={ dropping.checkpoint } >
+            <svelte:fragment slot="icon">
+              <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-blue-50 rounded-full ring-8 ring-blue-50">
+            
+                <i class="fa-solid fa-map-marker-alt w-3 h-3 text-green-600 dark:text-green-400" ></i>
+
+              </span>
+            </svelte:fragment>
+            <p class=" text-base font-bold text-gray-500 dark:text-gray-400"> { dropping.counter } </p>
+            
+          </TimelineItem>
+
+       
+      { /each }
+
+
+  </Timeline>
+
+
 </Modal>
 
 <Modal title= "Forgot to login?" bind:open={ openLoginAlertModal } { size } { color } autoclose>

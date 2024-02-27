@@ -4,38 +4,39 @@
 
     import DatePicker from '../../assets/datepickers/journeydatepicker.svelte'
 
-    import { storeSeatNumber, storeTrainCoach } from "../../store/store"
+    import { storeBusCategory } from "../../store/store"
 
-    let lastFiveValues = []
+    let lastFourValues = []
 
     const url = new URL(window.location.href)
 
     const pathsegments = url.hash.split('/').filter(Boolean)
 
-    lastFiveValues = pathsegments.slice(-5)
+    lastFourValues = pathsegments.slice(-4)
 
-    console.log( url, url.pathname, pathsegments, lastFiveValues ) 
+    console.log( url, url.pathname, pathsegments, lastFourValues ) 
 
-    let seat_number = []
+    //let seat_number = []
 
     export let defaultDate
 
-    for(let i = 1; i < 6; i++){
+    // for(let i = 1; i < 6; i++){
 
-        seat_number.push( { value : i, name : i } )
+    //     seat_number.push( { value : i, name : i } )
 
-    }
+    // }
 
-    import { seatType } from '../../data/train_details';
+    let categories = [ { value : "AC", name : "AC" } ,
+                       { value : "nonAC", name : "nonAC" }, 
+                       
+                        ]
 
     let selectedDate = new Date()
 
-    let seats,seat_class;
+    let category;
 
-    let default_seat_class = seatType.find( seatType => seatType.value === lastFiveValues[3])?.name
+    let default_category = categories.find( categories => categories.value === lastFourValues[2])?.name
   
-    let default_seat_number = seat_number.find( seat_number => seat_number.value === parseInt( lastFiveValues[2] , 10 ) )?.name
-
     export let placeholder_status
 
     const isSmallDevice = window.innerWidth <= 837
@@ -46,7 +47,7 @@
         
     <ButtonGroup class="w-full border-8 border-gray-400 rounded-lg ">
 
-      <Label class = "relative w-1/2" for = "number"> 
+      <!-- <Label class = "relative w-1/2" for = "number"> 
 
         <i class="fa-solid fa-xl fa-chair absolute left-3 top-1/2 cursor-pointer"></i>
         {#if placeholder_status === "true" } <Select items= { seat_number } id="number" placeholder="seats" bind:value = { seats } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => {storeSeatNumber.set(seats) } } required />
@@ -55,14 +56,14 @@
 
         {/if}
 
-      </Label>
+      </Label> -->
 
-      <Label class = "relative w-1/2" for = "coach"> 
+      <Label class = "relative w-full" for = "category"> 
 
-        <i class="fa-solid fa-xl fa-truck-fast absolute left-3 top-1/2 cursor-pointer"></i>
-        {#if placeholder_status === "true" }<Select items= { seatType } id="coach" placeholder = "coach"  bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storeTrainCoach.set(seat_class) } } required />
+        <i class="fa-solid fa-xl fa-lira-sign absolute left-3 top-1/2 cursor-pointer"></i>
+        {#if placeholder_status === "true" }<Select items= { categories } id="coach" placeholder = "Category"  bind:value = { category } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storeBusCategory.set(category) } } required />
 
-        {:else} <Select items= { seatType } id="text" placeholder = { ` ${ default_seat_class } ` } bind:value = { seat_class } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storeTrainCoach.set(seat_class) } }  />
+        {:else} <Select items= { categories } id="text" placeholder = { ` ${ default_category } ` } bind:value = { category } class = " pl-10 font-bold font-serif bg-gray-100 rounded-none hover:bg-green-200 cursor-pointer "  on:change = { () => { storeBusCategory.set(category) } }  />
 
         
         {/if}

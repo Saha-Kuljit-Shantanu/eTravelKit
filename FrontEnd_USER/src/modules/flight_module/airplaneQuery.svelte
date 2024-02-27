@@ -219,6 +219,10 @@
 
       storeSelectedAirline.set(air_line)
 
+      window.sessionStorage.setItem("storeAirline",air_line.air_company_name)
+      window.sessionStorage.setItem("storeFlight",air_line.flight_id)
+      window.sessionStorage.setItem("storeDepartureTime",air_line.departure_time)
+      window.sessionStorage.setItem("storeArrivalTime",air_line.arrival_time)
       console.log(air_line)
 
       
