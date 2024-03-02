@@ -83,7 +83,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
             
         <i class="fa-solid fa-md fa-train mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Start : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Train : </p>
         
 
         </svelte:fragment> 
@@ -98,7 +98,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
             
         <i class="fa-solid fa-md fa-train-tram mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Stoppage : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Departure : </p>
         
 
         </svelte:fragment> 
@@ -110,7 +110,7 @@ storeTrainTotalCost.subscribe( tot => { total = tot })
             
         <i class="fa-solid fa-md fa-train-subway mr-2 font-normal text-gray-800" > </i>
         <!-- <DollarOutline class="w-5 h-5 text-gray-500" /> -->
-        <p class="font-normal text-gray-800 text-sm md:text-lg"> Coach : </p>
+        <p class="font-normal text-gray-800 text-sm md:text-lg"> Arrival : </p>
         
 
         </svelte:fragment> 
