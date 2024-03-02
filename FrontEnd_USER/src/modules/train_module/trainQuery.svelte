@@ -150,23 +150,23 @@
 
     }
 
-    async function Cheapest(){
-      query = 'q=cheapest&'
+    // async function Cheapest(){
+    //   query = 'q=cheapest&'
+    //   todo()
+
+    // }
+
+    async function Shortest(){
+      query = 'q=shortestroutes&'
       todo()
 
     }
 
-    async function Earliest(){
-      query = 'q=early_takeoff&'
-      todo()
+    // async function unsort(){
+    //   query = ''
+    //   todo()
 
-    }
-
-    async function unsort(){
-      query = ''
-      todo()
-
-    }
+    // }
 
     import { storeSource, storeDest, storeSeatNumber, storeTrainCoach, storeJourneyDate } from "../../store/store"
     //import { routes } from "../../routes";
@@ -378,19 +378,21 @@
             <Button outline color="dark" class= " rounded-l-md rounded-r-none" on:click = { () => Quickest()}>
               
               <AdjustmentsVerticalOutline class="w-3 h-3 me-2" />
-              Sort by quickest flight
+              Sort by quickest trip
             </Button>
-            <Button outline color="dark" class= "  rounded-none" on:click = { () => Cheapest()}>
+            <!-- <Button outline color="dark" class= "  rounded-none" on:click = { () => Cheapest()}>
               <DollarSolid class="w-3 h-3 me-2" />
               Sort by pricing
-            </Button>
-            <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
-              <i class="fa-solid fa-plane-departure me-2"></i>
-              Sort by earliest takeoff
-            </Button>
-            <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => unsort()}>
+            </Button> -->
+            <!-- <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
+              <i class="fa-solid fa-train-tram me-2"></i>
+              Sort by shortest route
+            </Button> -->
+            <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => Shortest()}>
               <!-- <i class="fa-solid fa-plane-departure"></i> -->
-              Unsort
+              <!-- Unsort -->
+              <i class="fa-solid fa-train-tram me-2"></i>
+              Sort by shortest route
             </Button>
           </ButtonGroup>
 

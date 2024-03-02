@@ -451,7 +451,7 @@
               Sort by pricing
             </Button>
             <Button outline color="dark" class= "  rounded-none" on:click = { () => Earliest()}>
-              <i class="fa-solid fa-plane-departure me-2"></i>
+              <i class="fa-solid fa-bus me-2"></i>
               Sort by earliest departure
             </Button>
             <Button outline color="dark" class= " rounded-r-md rounded-l-none" on:click = { () => filter()}>
