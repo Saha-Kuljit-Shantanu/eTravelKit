@@ -7,6 +7,7 @@ import trainHomeSched from "./modules/train_module/trainHomeSched.svelte"
 
 import trainHomeCoach from "./modules/train_module/trainHomeCoach.svelte"
 import trainHomeConfig from './modules/train_module/trainHomeConfig.svelte'
+import trainHomeStats from './modules/train_module/trainHomeStats.svelte'
 
 // import trainHomeConfig from "./assets/train/trainHomeConfig.svelte"
 
@@ -38,6 +39,7 @@ export const routes = {
 
     '/home/:username/:train/coach' : trainHomeCoach,
     '/home/:username/:train/config' : trainHomeConfig,
+    '/home/:username/:train/stats' : trainHomeStats,
     
     '/signup' : signupform,
 

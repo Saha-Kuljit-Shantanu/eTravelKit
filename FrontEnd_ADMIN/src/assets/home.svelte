@@ -12,6 +12,7 @@
     import TrainHomeChildSched from "../modules/train_module/trainHomeChildSched.svelte";
     import TrainHomeChildCoach from "../modules/train_module/trainHomeChildCoach.svelte";
     import TrainHomeChildConfig from "../modules/train_module/trainHomeChildConfig.svelte";
+    import TrainHomeChildStats from "../modules/train_module/trainHomeChildStats.svelte";
 
 
     export let route;
@@ -205,8 +206,10 @@
         {#if route == "config"}
 
         <TrainHomeChildConfig />
-
-      {/if} 
+        {/if}
+        {#if route == "stats"}
+        <TrainHomeChildStats />
+        {/if} 
         
       <div></div>
       

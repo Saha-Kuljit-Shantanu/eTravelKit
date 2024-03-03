@@ -33,13 +33,14 @@
 
   <div class = "basis-1/5 h-one-tenth w-full ml-96 mt-24" >
 
-    {#if route === "route" || route === "sched" || route === "coach" || route === "ticketstats" || route === "config" }
+    {#if route === "route" || route === "sched" || route === "coach" || route === "ticketstats" || route === "config" || route === "stats"}
 
       <NavUl {activeUrl} {activeClass} {nonActiveClass}>
         <NavLi href = "{abspath}/route" class = "text-lg cursor-pointer">Route</NavLi>
         <NavLi href = "{abspath}/coach" class = "text-lg cursor-pointer">Coach</NavLi>
         <NavLi href = "{abspath}/sched" class = "text-lg cursor-pointer">Schedule</NavLi>
         <NavLi href = "{abspath}/config" class = "text-lg cursor-pointer">Config</NavLi>
+        <NavLi href = "{abspath}/stats" class = "text-lg cursor-pointer">Stats</NavLi>
         <!-- <NavLi href = "{abspath}/stats" class = "text-lg cursor-pointer">Stats</NavLi> -->
       </NavUl>
 
