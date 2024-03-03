@@ -47,3 +47,39 @@ export async function updateRoutes(data) {
         body: JSON.stringify(data),
     })
 }
+
+export async function addSchedule(data) {
+    console.log(data)
+    return await fetch(`http://localhost:30062/admin/addschedule`,{
+        // mode : 'no-cors' ,
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+}
+
+export async function getSeatInfoBySchedule(data) {
+    console.log(data)
+    return await fetch(`http://localhost:30062/admin/train/getInfoBySchedule`,{
+        // mode : 'no-cors' ,
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+}
+
+export async function updateSchedule(data,) {
+    console.log(data)
+    return await fetch(`http://localhost:30062/admin/train/updateSchedule`,{
+        // mode : 'no-cors' ,
+        method: 'POST',
+        headers: {
+         'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+}
