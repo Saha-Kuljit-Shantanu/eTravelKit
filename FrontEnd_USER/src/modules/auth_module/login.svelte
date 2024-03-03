@@ -62,9 +62,9 @@
 
       //storeusername.set(username)////////////
 
-      window.sessionStorage.setItem( username , data.accesstoken )
+      window.localStorage.setItem( username , data.accesstoken )
 
-      window.sessionStorage.setItem( "username", username)
+      window.localStorage.setItem( "username", username)
       
       console.log(data);
 

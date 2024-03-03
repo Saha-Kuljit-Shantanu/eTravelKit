@@ -16,7 +16,7 @@
 
     //storeusername.subscribe( uname => { username = uname })/////////////////////
 
-    username = window.sessionStorage.getItem("username")
+    username = window.localStorage.getItem("username")
 
     console.log(activeUrl,username)
 

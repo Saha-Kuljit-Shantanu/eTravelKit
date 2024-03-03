@@ -24,7 +24,7 @@
 
   import { storeAirplaneSelectedSeat, storeSelectedAirline } from "../../store/store"
 
-  import {proceedToPayment} from "../../api/proceedToPayment"
+  import { proceedToPaymentAir} from "../../api/proceedToPayment"
 
   import { push } from 'svelte-spa-router'
 
@@ -82,6 +82,20 @@
   import { onMount } from "svelte"
   import { storeFlightTotalCost } from "../../store/store";
   import { airlineSeatBook } from "../../api/airlineSeatBook";
+
+  import { airports} from "../../data/airport_name";
+
+  function getPortName(portCode){
+
+
+    for (const item of airports) {
+      if (item.value === portCode) {
+        return item.name;
+      }
+    }
+
+
+  }
   
 
  
@@ -180,24 +194,42 @@ async function proceed() {
 
     // }
 
+    let bookData = {
+
+      "user_name" : window.localStorage.getItem("username"), 
+      "accesstoken" : window.localStorage.getItem( window.localStorage.getItem("username") ),
+      "class_name" : grid.class_name,
+      "schedule_id" : grid.schedule_id,
+      "booked_details" : selectList,
+
+
+
+    }
+
+    const bookFormData = JSON.stringify(bookData)
+
+    const bookResponse = await airlineSeatBook( bookFormData,lastSixValues )
+
+    const dt = await bookResponse.json()
+
     let jsonData = {
     
-      "user_name" : window.sessionStorage.getItem("username"), 
-      "accesstoken" : window.sessionStorage.getItem( window.sessionStorage.getItem("username") ),
+      "user_name" : window.localStorage.getItem("username"), 
+      "accesstoken" : window.localStorage.getItem( window.localStorage.getItem("username") ),
       "seat_booked" : selectList,
       "air_schedule_id" : grid.schedule_id,
       "grandTotalFare" : totalPrice,
       "class_name" : grid.class_name,
       "seat_booked_string" : selectString , 
       "transportType" : "air" ,
-      "source" : grid.from_Port,
-      "destination" : grid.to_Port
+      "source" : getPortName(grid.from_Port),
+      "destination" : getPortName(grid.to_Port)
 
     };
 
     const formData = JSON.stringify(jsonData)
 
-    const response = await proceedToPayment( formData )
+    const response = await proceedToPaymentAir( formData )
 
     console.log('response = ' , response)
 

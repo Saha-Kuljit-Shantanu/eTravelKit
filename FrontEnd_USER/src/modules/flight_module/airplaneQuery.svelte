@@ -203,7 +203,7 @@
 
       // /seat_details/${source}/${dest}/${seat_number}/${seat_class}/${selectedDate}/${flight_id}
 
-      if(window.sessionStorage.getItem("username") == undefined){
+      if(window.localStorage.getItem("username") == undefined){
 
         color = "red"
 

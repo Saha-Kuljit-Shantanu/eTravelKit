@@ -176,15 +176,35 @@ async function proceed() {
 
     // }
 
+    let bookData = {
+
+      "user_name" : window.localStorage.getItem("username"), 
+      "accesstoken" : window.localStorage.getItem( window.localStorage.getItem("username") ),
+      "coach_name" : grid.coach_name,
+      "schedule_id" : grid.schedule_id,
+      "booked_details" : selectList,
+
+
+
+    }
+
+    const bookFormData = JSON.stringify(bookData)
+
+    const bookResponse = await trainSeatBook( bookFormData,lastSixValues )
+
+    const bookdata = await bookResponse.json()
+
+    console.log(bookData)
+
     let jsonData = {
     
-      "user_name" : window.sessionStorage.getItem("username"), 
-      "accesstoken" : window.sessionStorage.getItem( window.sessionStorage.getItem("username") ),
+      "user_name" : window.localStorage.getItem("username"), 
+      "accesstoken" : window.localStorage.getItem( window.localStorage.getItem("username") ),
       "booked_details" : selectList,
       "schedule_id" : grid.schedule_id,
       "grandTotalFare" : totalPrice,
       "class_name" : grid.class_name,
-      "transporType" : "train" 
+      "transportType" : "train" 
 
     };
 
@@ -230,6 +250,7 @@ async function proceed() {
 }
 
 import { Boggy } from "../../data/train_details"
+    import { trainSeatBook } from "../../api/trainSeatBook";
 
 function fragmentArray(array, size) {
   return array.reduce((acc, _, i) => (i % size === 0 ? acc.push(array.slice(i, i + size)) : null, acc), []);

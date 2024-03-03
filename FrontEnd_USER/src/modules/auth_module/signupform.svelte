@@ -59,7 +59,8 @@
 
         console.log(data);
 
-        push(`/${username}`)
+
+        push(`/home/${username}`)
 
       }
 

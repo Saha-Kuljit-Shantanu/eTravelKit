@@ -12,7 +12,7 @@
 
     let stringCardTitle;
     let stringCardContent;
-    const username = window.sessionStorage.username
+    const username = window.localStorage.username
 
     storecardtitle.subscribe( title => { stringCardTitle = title} )
     storecardcontent.subscribe( content => { stringCardContent = content} )
@@ -38,8 +38,8 @@
 
    function logout(){
 
-    window.sessionStorage.removeItem(window.sessionStorage.getItem("username") )
-    window.sessionStorage.removeItem("username")
+    window.localStorage.removeItem(window.localStorage.getItem("username") )
+    window.localStorage.removeItem("username")
     push('/')
 
    }
