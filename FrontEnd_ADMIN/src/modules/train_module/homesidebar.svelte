@@ -6,9 +6,15 @@
     import '@fortawesome/fontawesome-free/css/all.css';
     import { push } from 'svelte-spa-router';
     import { onMount } from 'svelte';
+    import { Modal, Button } from 'flowbite-svelte';
+    import { Input } from 'flowbite-svelte';
+    import { Label } from 'flowbite-svelte';
+    import { Badge } from 'flowbite-svelte';
     
     // import trainAdminAPi from api folder
     import  {getAlltrains} from '../../api/trainAdmin/trainGet'
+    import  {addTrain} from '../../api/trainAdmin/trainPost'
+    import { add } from 'date-fns';
     //import { writable } from 'svelte/store';
     //import { storeusername } from '../../store/store'/////////////////////
     
@@ -19,6 +25,8 @@
     //let active = true
 
     let username = '';
+    let inp = ''
+    let addModal = false;
 
     //storeusername.subscribe( uname => { username = uname })/////////////////////
 
@@ -43,6 +51,7 @@
     }
 
     let trainList = [] ;
+    addModal = false ;
     onMount( async() => {
       console.log(username)
       let response = await getAlltrains(username);
@@ -58,9 +67,23 @@
       trainList = await response.json()
       trainList = trainList.map( train => train.train_uid)
       console.log(trainList)
+      inp = ' '
       
 
     })
+
+    async function addition() {
+      const response = await addTrain({company_name:username,train_uid:inp}) ;
+      inp = '' ;
+      if(!response.ok){
+        console.log("error") ;
+        return ;
+      }
+      if(response.status != 200){
+        console.log("no routes found") ;
+        return ;
+      }
+    }
 </script>
 
   <Sidebar {activeUrl} {activeClass} {nonActiveClass} {spanClass} class = "h-screen" >
@@ -102,103 +125,54 @@
           {/each}
         </SidebarDropdownWrapper>
       
+        <Button class = "flex items-center justify-start p-2 text-base w-full font-normal text-gray-200 bg-gray-400 rounded-lg dark:text-white hover:bg-green-100 hover:text-blue-500 dark:hover:bg-green-700" on:click ={()=> ( addModal = true ) } > 
+          <!-- <svelte:fragment slot="icon"> -->
+            <PlusOutline class="w-5 h-5 me-2 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+            
+          <!-- </svelte:fragment> -->
 
-        <SidebarItem label="Add Train" class = "bg-gray-400" >
+          Add Train 
+          <!-- <Input type="text" bind:value={inp} id="train_uid" class="flex-justify-content" required/>
+          <Button class = "bg-black" on:click = {addition} >
+            <svelte:fragment slot="icon">
+              <PlusOutline class="w-5 h-5 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+            </svelte:fragment>
+          </Button> -->
+        </Button>
+
+        <!-- <SidebarItem label="Info" class = "bg-gray-400" >
           <svelte:fragment slot="icon">
             <PlusOutline class="w-5 h-5 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
           </svelte:fragment>
-        </SidebarItem>
-
-        <SidebarItem label="Info" class = "bg-gray-400" >
-          <svelte:fragment slot="icon">
-            <PlusOutline class="w-5 h-5 text-gray-800 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-          </svelte:fragment>
-        </SidebarItem>
+        </SidebarItem> -->
 
         
 
     </SidebarGroup>
-    <!-- <SidebarGroup border> -->
-
-        <!-- <SidebarItem label="Hotel Booking" >
-          <svelte:fragment slot="icon">
-            
-            <i class="fa-solid fa-hotel"></i>
-
-            </svelte:fragment>
-          
-        </SidebarItem> -->
-
-        <!-- <svelte:fragment slot="subtext">
-            <span class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300" > Pro </span>
-          </svelte:fragment> -->
-
-
-        <!-- <SidebarItem label="Airplane" href="/#/airplane" >
-          <svelte:fragment slot="icon">
-              <i class="fa-solid fa-plane"></i>
-          </svelte:fragment>
-        </SidebarItem> -->
-
-
-        <!-- <SidebarItem label="Bus" >
-            <svelte:fragment slot="icon">
-
-             <i class="fa-solid fa-bus"></i>
-            
-            </svelte:fragment>
-        </SidebarItem> -->
-
-
-        <!-- <SidebarItem label="Train" href="/#/train" >
-
-            <svelte:fragment slot="icon">
-              
-              <i class="fa-solid fa-train"></i>
-  
-              </svelte:fragment> -->
-            <!-- <svelte:fragment slot="subtext">
-              <span class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300" > Pro </span>
-            </svelte:fragment> -->
-
-        <!-- </SidebarItem>
-
-        <SidebarItem label="Launch" > -->
-
-            <!-- <svelte:fragment slot="icon">
-              
-              <i class="fa-solid fa-ship"></i>
-  
-              </svelte:fragment> -->
-            <!-- <svelte:fragment slot="subtext">
-              <span class="inline-flex justify-center items-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300" > Pro </span>
-            </svelte:fragment> -->
-            
-        <!-- </SidebarItem>
-
-    </SidebarGroup>
-    <SidebarGroup border> -->
-
-
-        
-
-        <!-- <SidebarItem label="Help">
-            <svelte:fragment slot="icon">
-            <QuestionCircleOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                
-            </svelte:fragment>
-        </SidebarItem>
-
-        <SidebarItem label="Sign Out">
-            <svelte:fragment slot="icon">
-            <ArrowRightFromBracketSolid class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                
-            </svelte:fragment>
-        </SidebarItem> -->
-
-
-      <!-- </SidebarGroup> -->
     </SidebarWrapper>
   </Sidebar>
 
-  
+  <!-- Add a modal with input field -->
+
+  <Modal bind:open={addModal} size="xs" autoclose={false} class="w-full">
+    <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white bg-blur">Add New Train</h3>
+          <div class="flex-justify-content grid grid-cols-2">
+            <!-- <Badge rounded color="gray-200" class="ml-1 mt-1 text-sm w-24 tracking-tight text-gray-900 dark:text-white relative font-bold w-fit bg-gray-300 border-black">
+
+              <span class="">{coach}</span>
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M4 5a2 2 0 0 0-2 2v2.5c0 .6.4 1 1 1a1.5 1.5 0 1 1 0 3 1 1 0 0 0-1 1V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2.5a1 1 0 0 0-1-1 1.5 1.5 0 1 1 0-3 1 1 0 0 0 1-1V7a2 2 0 0 0-2-2H4Z"/>
+              </svg>
+            </Badge>
+            <svg class="w-32 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M7 6c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M2 11c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"/>
+              <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+            </svg> -->
+          </div>
+          <Label class="space-y-2 justify-content">
+            <span>Train Name</span>
+            <Input id="text" bind:value={inp} type="text" name="Tain Name"  required />
+          </Label>
+      <Button type="submit" class="w-full1 bg-gray-300 bg-black" on:click={()=>addition()}>Add</Button>
+</Modal>

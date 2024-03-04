@@ -161,7 +161,7 @@
 
     <div class="flex flex-row w-full ">
 
-      <div class = "basis-1/5 h-full fixed mb-2 " id = "top-20" > <Homesidebar /> </div>
+      
 
       {#if route == "home"}
 
@@ -217,6 +217,7 @@
 
       {/if}
   
+      <div class = "basis-1/5 h-full fixed mb-2 " id = "top-20" > <Homesidebar /> </div>
     </div>
   
   </div>

@@ -73,6 +73,7 @@
     let updateModal = false ;
     let cancelModal = false ;
     let msg = '' ;
+    let username = window.sessionStorage.getItem("username") ;
 
     async function showModal(train){
 
@@ -177,7 +178,7 @@
           routes: newRoutesSched,
           booking : booking ,
           cancel_deadline: dates[0],
-          train_id : 1
+          company_name : username,
         }
         const response = await addSchedule(postData) ;
         if(!response.ok){

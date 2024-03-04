@@ -40,6 +40,7 @@ export const routes = {
     '/home/:username/:train/coach' : trainHomeCoach,
     '/home/:username/:train/config' : trainHomeConfig,
     '/home/:username/:train/stats' : trainHomeStats,
+    // '/home/:username/:addTrain' : homeHome,
     
     '/signup' : signupform,
 

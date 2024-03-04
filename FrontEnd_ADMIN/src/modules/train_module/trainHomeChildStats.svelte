@@ -1,10 +1,11 @@
 <script>
-	import { Chart } from 'chart.js';
-
-
+	import { slide } from 'svelte/transition';
+	import { Chart ,registerables} from 'chart.js';
+	Chart.register(...registerables);
     import { onMount } from "svelte"
     // library that creates chart objects in page
-    // import {getRoutes} from '../../api/trainAdmin/trainGet'
+    import {getRoutes, getScheduleByUID} from '../../api/trainAdmin/trainGet'
+    import {getSeatInfoBySchedule} from '../../api/trainAdmin/trainPost'
 
 
     // let train = []
@@ -17,21 +18,19 @@
 
     let train = window.sessionStorage.getItem("selected")
 
-    let Route = [], trainstationList = [[],[]]
+    let scheds = [] , ticketData = [[]] ;
 
     //export let option = "route"
 
-    //get routes of a train
-
-    function custom(){
-        // return {
-        //     css:(t,u)=> 'transform:translatex(${u*200px})',
-        // }
+    function getFirstDate(route) {
+        if (route.length > 0 && route[0].date) {
+            return new Date(route[0].date);
+        }
+        return null;
     }
 
-    // trainstationList = dummystationList
-
-    console.log(trainstationList) 
+    //get routes of a train
+    //getSEatInfo By schedule
     // function fade(
     //     node: Element,
     //     { delay, duration, easing }?: FadeParams | undefined
@@ -41,21 +40,60 @@
      * task 1 - get the last 10 schedules of the specific train and
      * task-2 - get the details of coach wise 
     */
-  
+    async function todo() {
+        const schedResponse = await getScheduleByUID(train) ;
+        if(!schedResponse.ok){
+            console.log("error") ;
+            return ;
+        }
+        if(schedResponse.status != 200){
+            console.log("no routes found") ;
+            return ;
+        }
+        let data = await schedResponse.json() ;
+        //data is an array
+        console.log(data.length) ;
+        data.sort((a, b) => {
+            let firstDateA = getFirstDate(a.routes);
+            let firstDateB = getFirstDate(b.routes);
+            if (firstDateA && firstDateB) {
+                return firstDateA - firstDateB;
+            }
+            return 0 ;
+        }) ;
+        scheds = data.slice(0, 10) ;
+
+        //now get the TICKETINFO
+        for(let i = 0 ; i < scheds.length ; i++){
+            let data = {
+            schedule_id : scheds[i].schedule_id,
+            train_uid : train
+            }
+            const response = await getSeatInfoBySchedule(data) ;
+            if(!response.ok){
+                console.log("error") ;
+                return ;
+            }
+            if(response.status != 200){
+                console.log("no ticket found") ;
+                return ;
+            }
+            ticketData.push(await response.json()) ;
+        }
+        console.log(ticketData) ;
+    }
     // init chart
     onMount(async () => {
+      
+                //at first get the schdules of the train
+      await todo()
+
+      let dates = scheds.map(f=>f.routes[0].date) ;
+      console.log(dates) ;
       let config = {
         type: 'bar',
         data: {
-          labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-          ],
+          labels: dates ,
           datasets: [
             {
               label: new Date().getFullYear(),
@@ -138,6 +176,7 @@
       };
     let ctx = document.getElementById("bar-chart").getContext("2d");
     window.myBar = new Chart(ctx, config);
+    // await todo()
 });
   </script>
   
